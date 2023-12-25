@@ -12,4 +12,4 @@ $data_array = [
  //$crud->create($data_array, 'movies');
 //$results = $crud->read('SELECT * from movies');
 //$crud->update("UPDATE movies SET mv_title = 'Titanic 2' where mv_id =1");
-$crud->delete("DELETE from movies where mv_id = 5");
+//$crud->delete("DELETE from movies where mv_id = 5");
