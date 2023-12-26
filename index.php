@@ -1,3 +1,5 @@
+<?php
+?>
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
@@ -223,4 +225,5 @@
         <p>© 2017-2018 Company, Inc. · <a href="http://localhost/movies_/#">Privacy</a> · <a href="http://localhost/movies_/#">Terms</a></p>
     </footer>
 
-</body></html>
+</body>
+</html>

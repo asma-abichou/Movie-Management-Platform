@@ -1,3 +1,5 @@
+<?php
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -167,7 +169,7 @@
                 <div id="main-panel-left-sidebar">
                     <div id ="add-btn-container">
                         <div class = "sidebar-row">
-                            <a href="add-movie.html" class = "btn btn-add">
+                            <a href="add-movie.php" class = "btn btn-add">
                                 <i class="fas fa-plus"></i>
                                 Add New Movie</a>
                         </div>

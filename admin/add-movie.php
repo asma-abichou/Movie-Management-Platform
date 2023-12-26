@@ -1,6 +1,6 @@
 <?php
     if(($_SERVER['REQUEST_METHOD'] == 'POST')){
-        include_once "mms/MoviesController.php";
+        include_once "../MoviesController.php";
 
         $moviesController = new MoviesController();
         $moviesController->addMovie();
@@ -28,10 +28,11 @@
     <meta name="theme-color" content="#ffffff">
 
     <link href="../css/style.css" rel="stylesheet" type="text/css">
+    <link href="../css/datepicker.min.css" rel="stylesheet" type="text/css">
 
 
     <!-- Include English language -->
-    <script src="js/plugins/datepicker/dist/js/i18n/datepicker.en.js"></script>
+   // <script src="js/plugins/datepicker/dist/js/i18n/datepicker.en.js"></script>
 
     <style>
         .page-link {
@@ -181,7 +182,7 @@
                 <h4>Add Movie</h4>
             </div>
             <div id="add-movie-form-container">
-                <form class="form-horizontal" method="post" id="add-movie-form" action='/movies_/admin.php?action=add' autocomplete="off" enctype="multipart/form-data" />
+                <form class="form-horizontal" method="post" id="add-movie-form" action='<?php $_SERVER['PHP_SELF'] ?>' autocomplete="off" enctype="multipart/form-data" />
 
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="email">Title:</label>
@@ -221,7 +222,7 @@
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
                             <button type="submit" class="btn pull-right">Submit</button>
-                            <a href="list-movies.html" class="btn pull-right" style="margin-right: 5px;">Back</a>
+                            <a href="list-movies.php" class="btn pull-right" style="margin-right: 5px;">Back</a>
                         </div>
                     </div>
                 </form>
@@ -229,22 +230,31 @@
         </div> 
     </div>
     <!-- Footer -->
-    <footer class="page-footer font-small blue">
+        <footer class="page-footer font-small blue">
 
-        <!-- Copyright -->
-        <div class="footer-copyright text-center py-3">© 2019 Copyright:
-            <a href="https://mdbootstrap.com/education/bootstrap/"> goodmovies</a>
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3">© 2019 Copyright:
+                <a href="https://mdbootstrap.com/education/bootstrap/"> goodmovies</a>
+            </div>
+            <!-- Copyright -->
+
+        </footer>
+
+
         </div>
-        <!-- Copyright -->
 
-    </footer>
-    <!-- Footer -->
+    </div>
     </div>
 
-        </div>
-    </div>
-</div>
-</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <script src="../js/datepicker.min.js"></script>
+    <script src="../js/datepicker.en.js"></script>
+    <script>
+        $('#datepicker').datepicker({
+            language: 'en',
+        })
+    </script>
 
 </body>
 </html>
