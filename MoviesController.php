@@ -18,6 +18,7 @@ class MoviesController
         //ged genres from the request
         $movie_genres = isset($_POST['genres']) ? $_POST['genres'] : "" ;
         $this->createMovieGenres($movie_genres, $movie_id);
+        $this->saveAndUploadCoverImage($movie_id);
     }
 
     public function createMovieGenres($movies_genres, $movie_id)
@@ -34,11 +35,13 @@ class MoviesController
     //get the movies from the DataBase and return them
     public function getMovies(){
         //give all genres movies
-        $query = "SELECT mv_id, mv_title, gnr_name, GROUP_CONCAT(gnr_name) genres, mv_year_released
+        $query = "SELECT mv_id, mv_title,img_path, gnr_name, GROUP_CONCAT(gnr_name) genres, mv_year_released
                      FROM `movies`
                     LEFT JOIN mv_genres on mvg_ref_movie = mv_id 
                     LEFT JOIN genres on mvg_ref_genre = gnr_id
-                    GROUP BY mv_id";
+                    LEFT JOIN images on img_ref_movie = mv_id
+                    GROUP BY mv_id
+                    ORDER BY mv_id DESC";
         $results = $this->crud->read($query);
         return $results;
     }
@@ -46,21 +49,23 @@ class MoviesController
     //upload cover img for our movie
     public function saveAndUploadCoverImage($movie_id){
         // Directory path
-        $dir = "images/movie_covers/movie_$movie_id/"; //movie_1
+        $dir = "../images/movie_covers/movie_$movie_id/"; //movie_1
         // If the directory doesn't exist, create it with the permissions 0744
-        if(! file_exists($dir)){
-            mkdir($dir, 0744);
+        if( !file_exists($dir)){
+            mkdir($dir, 0744, true);
         }
         // Append the basename of the uploaded file to the directory path
-        $dir = $dir."/".basename($_FILES["cover_images"]["name"]);
+        $dir = $dir . "/" . basename($_FILES["cover_image"]["name"]);
 
         // Upload the image to the specified directory
         // Note: The second argument of move_uploaded_file should be the full destination path, not just the directory
-        move_uploaded_file($_FILES["cover_images"]["name"],$dir);
+        move_uploaded_file($_FILES["cover_image"]["tmp_name"],$dir);
         $image_info=[
-            'img_path' => $dir,
+            // Using str_replace to remove any occurrences of '../' in the directory path
+            'img_path' => str_replace('../','',$dir),
             'img_ref_movie' => $movie_id
         ];
+        $this->crud->create($image_info, 'images');
 
     }
 }
