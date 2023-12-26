@@ -29,10 +29,12 @@
 
     <link href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="../css/datepicker.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/chosen.min.css" rel="stylesheet" type="text/css">
+
 
 
     <!-- Include English language -->
-   // <script src="js/plugins/datepicker/dist/js/i18n/datepicker.en.js"></script>
+   <script src="js/plugins/datepicker/dist/js/i18n/datepicker.en.js"></script>
 
     <style>
         .page-link {
@@ -195,12 +197,15 @@
                         <label class="control-label col-sm-2" for="pwd">Genre:</label>
                         <div class="col-sm-10">
                             <select data-placeholder="Select Genre(s)..." multiple class="form-control genre"  name="genres[]" id="genre[]">
-                                    <option value="1">Romance</option>
-                                    <option value="2">Thriller</option>
-                                    <option value="3">Action</option>
-                                    <option value="4">Commedy</option>
-                                    <option value="5">Drama</option>
-                                    <option value="6">Documentary</option>
+                                <?php include_once "../Crud.php";
+                                $crud = new Crud();
+                                $genres = $crud->read('Select * from genres');
+                                foreach($genres as $key =>$genre){ ?>
+                                    <option value="<?=$genre['gnr_id']?>"><?=$genre['gnr_name']?></option>
+                                }
+                                ?>
+
+
                             </select>
                             <span class="help-block"></span>
                         </div>
@@ -250,10 +255,12 @@
 
     <script src="../js/datepicker.min.js"></script>
     <script src="../js/datepicker.en.js"></script>
+    <script src="../js/chosen.jquery.js"><</script>
     <script>
         $('#datepicker').datepicker({
             language: 'en',
         })
+        $('.genre').chosen('Select Genre(s');
     </script>
 
 </body>
