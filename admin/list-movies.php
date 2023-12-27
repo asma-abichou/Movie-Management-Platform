@@ -230,7 +230,7 @@
                                 <td><?= $movie['mv_year_released']?></td>
                                 <td style="width:15px"><img src="../<?=$movie['img_path']?>" height="25px" width="25px"></td>
                                 <td style="width:15px">
-                                    <a href="admin.php?action=edit-movie&id=58">edit</a>
+                                    <a href="edit-movie.php?id=<?= $movie['mv_id'] ?>">edit</a>
                                     <a href="admin.php?action=edit-movie">delete</a>
                                 </td>
                         </tr>

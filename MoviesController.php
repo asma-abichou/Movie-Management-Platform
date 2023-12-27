@@ -45,6 +45,19 @@ class MoviesController
         $results = $this->crud->read($query);
         return $results;
     }
+    public function getMovie($mv_id){
+        //give all genres movies
+        $query = "SELECT mv_id, mv_title,img_path, gnr_name, GROUP_CONCAT(gnr_name) genres, mv_year_released
+                     FROM `movies`
+                    LEFT JOIN mv_genres on mvg_ref_movie = mv_id 
+                    LEFT JOIN genres on mvg_ref_genre = gnr_id
+                    LEFT JOIN images on img_ref_movie = mv_id
+                    WHERE mv_id = $mv_id
+                    GROUP BY mv_id
+                    ORDER BY mv_id DESC";
+        $results = $this->crud->read($query);
+        return $results;
+    }
 
     //upload cover img for our movie
     public function saveAndUploadCoverImage($movie_id){
