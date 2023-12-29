@@ -5,7 +5,7 @@ $movie = $moviesController->getMovie($_GET['id']);
 
     if(($_SERVER['REQUEST_METHOD'] == 'POST')){
 
-       // $moviesController->addMovie();
+        $moviesController->editMovie($_GET['id']);
     }
 ?>
 <!DOCTYPE html>
@@ -203,16 +203,20 @@ $movie = $moviesController->getMovie($_GET['id']);
                                 include_once "../Crud.php";
                                 //create an object of our crud class
                                 $crud = new Crud();
-                                //get all the genres from the data base and we display them
-                                $genres = $crud->read('Select * from genres',false);
-                                $current_genres = explode(',',$movie[0]['genres']);
+                                $movie_id = $movie[0]['mv_id'];
+                                //get all the genres from the database and we display them
+                                $genres = $crud->read('select * from genres',false);
+
+                                $current_genres = $crud->read("select * from mv_genres
+                                                  join genres on gnr_id = mvg_ref_genre   
+                                                  where mvg_ref_movie = $movie_id");
                                 ?>
                             <select data-placeholder="Select Genre(s)..." multiple class="form-control genre"  name="genres[]" id="genre[]">//add genres
                                 <?php foreach($genres as $key => $genre){ ?>}
                                     <option value="<?=$genre['gnr_id']?>"><?=$genre['gnr_name']?></option>
                                <?php }?>
                                 <?php foreach($current_genres as $key=>$genre){ ?>}
-                                    <option value="0" selected="selected"><?=$genre?></option>
+                                    <option value="<?= $genre['gnr_id'] ?>" selected="selected"><?=$genre['gnr_name']?></option>
                                 <?php }?>
                             </select>
                             <span class="help-block"></span>

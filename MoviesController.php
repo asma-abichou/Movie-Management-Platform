@@ -24,12 +24,17 @@ class MoviesController
     public function createMovieGenres($movies_genres, $movie_id)
     {
         foreach ($movies_genres as $key => $genre_id) {
-            $movie_genres_arr = [
-                'mvg_ref_genre' => $genre_id,
-                'mvg_ref_movie' => $movie_id
-            ];
+            $movies_genres = $this->crud->read("SELECT * FROM mv_genres where mvg_ref_movie = $movie_id");
+            if(empty($movies_genres)){
+                $movie_genres_arr = [
+                    'mvg_ref_genre' => $genre_id,
+                    'mvg_ref_movie' => $movie_id
+                ];
+                $this->crud->create($movie_genres_arr, 'mv_genres');
+            }
+
         }
-        $this->crud->create($movie_genres_arr, 'mv_genres');
+
     }
 
     //get the movies from the DataBase and return them
@@ -81,4 +86,37 @@ class MoviesController
         $this->crud->create($image_info, 'images');
 
     }
+    public function editMovie($movie_id){
+        $year_released = $_POST['mv_year_released'];
+        $mv_title = $_POST['mv_title'];
+
+        $sql = "UPDATE movies
+                set mv_year_released = '$year_released', mv_title = '$mv_title'
+                WHERE mv_id = $movie_id";
+
+        $this->crud->update($sql);
+        $this->createMovieGenres($_POST['genres'], $movie_id);
+
+        $this->deletedSelectedGenre($movie_id);
+        if(!empty($_FILES['cover_image']['name'])){
+            $this->crud->delete("delete from images where img_ref_movie = $movie_id");
+            $this->saveAndUploadCoverImage($movie_id);
+        }
+    }
+    public function deletedSelectedGenre($movie_id){
+        // Retrieve all genres associated with the specified movie
+        $movie_genres = $this->crud->read("SELECT * FROM mv_genres WHERE mvg_ref_movie = $movie_id");
+
+        // Iterate through each genre associated with the movie
+        foreach ($movie_genres as $key => $movie_genre){
+            // Get the genre ID
+            $genre_id = $movie_genre['mvg_ref_genre'];
+
+            // Check if the genre is not selected in the form (not present in $_POST['genres'])
+            if(!in_array($genre_id, $_POST['genres']))
+                // If not selected, delete the association between the genre and the movie
+                $this->crud->delete("DELETE FROM mv_genres WHERE mvg_ref_genre = $genre_id");
+        }
+    }
+
 }
