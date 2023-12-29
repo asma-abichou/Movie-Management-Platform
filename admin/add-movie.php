@@ -1,4 +1,7 @@
 <?php
+include "../session.php";
+Session::start();
+
     if(($_SERVER['REQUEST_METHOD'] == 'POST')){
         include_once "../MoviesController.php";
 

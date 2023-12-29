@@ -19,6 +19,11 @@ class MoviesController
         $movie_genres = isset($_POST['genres']) ? $_POST['genres'] : "" ;
         $this->createMovieGenres($movie_genres, $movie_id);
         $this->saveAndUploadCoverImage($movie_id);
+        Session::set('success-message', 'Movie Added Successfully');
+
+        header('Location: list-movies.php');
+
+
     }
 
     public function createMovieGenres($movies_genres, $movie_id)
