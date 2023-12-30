@@ -7,6 +7,7 @@ class MoviesController
     {
         $this->crud = new Crud();
     }
+
     public function addMovie()
     {
         $movie_data = [
@@ -19,11 +20,10 @@ class MoviesController
         $movie_genres = isset($_POST['genres']) ? $_POST['genres'] : "" ;
         $this->createMovieGenres($movie_genres, $movie_id);
         $this->saveAndUploadCoverImage($movie_id);
+
         Session::set('success-message', 'Movie Added Successfully');
 
         header('Location: list-movies.php');
-
-
     }
 
     public function createMovieGenres($movies_genres, $movie_id)
@@ -55,6 +55,7 @@ class MoviesController
         $results = $this->crud->read($query);
         return $results;
     }
+
     public function getMovie($mv_id){
         //give all genres movies
         $query = "SELECT mv_id, mv_title,img_path, gnr_name, GROUP_CONCAT(gnr_name) genres, mv_year_released
@@ -89,8 +90,8 @@ class MoviesController
             'img_ref_movie' => $movie_id
         ];
         $this->crud->create($image_info, 'images');
-
     }
+
     public function editMovie($movie_id){
         $year_released = $_POST['mv_year_released'];
         $mv_title = $_POST['mv_title'];
@@ -107,11 +108,14 @@ class MoviesController
             $this->crud->delete("delete from images where img_ref_movie = $movie_id");
             $this->saveAndUploadCoverImage($movie_id);
         }
+        Session::set('success-message', 'Movie Added Successfully');
+
+        header('Location: list-movies.php');
     }
+
     public function deletedSelectedGenre($movie_id){
         // Retrieve all genres associated with the specified movie
         $movie_genres = $this->crud->read("SELECT * FROM mv_genres WHERE mvg_ref_movie = $movie_id");
-
         // Iterate through each genre associated with the movie
         foreach ($movie_genres as $key => $movie_genre){
             // Get the genre ID
@@ -123,5 +127,4 @@ class MoviesController
                 $this->crud->delete("DELETE FROM mv_genres WHERE mvg_ref_genre = $genre_id");
         }
     }
-
 }

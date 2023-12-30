@@ -1,4 +1,6 @@
 <?php
+    include "../session.php";
+
 include_once "../MoviesController.php";
 $moviesController = new MoviesController();
 $movie = $moviesController->getMovie($_GET['id']);
