@@ -108,7 +108,7 @@ class MoviesController
             $this->crud->delete("delete from images where img_ref_movie = $movie_id");
             $this->saveAndUploadCoverImage($movie_id);
         }
-        Session::set('success-message', 'Movie Added Successfully');
+        Session::set('success-message', 'Movie Updated Successfully');
 
         header('Location: list-movies.php');
     }
@@ -126,5 +126,13 @@ class MoviesController
                 // If not selected, delete the association between the genre and the movie
                 $this->crud->delete("DELETE FROM mv_genres WHERE mvg_ref_genre = $genre_id");
         }
+    }
+    public function deleteMovie($movie_id){
+        $this->crud->delete("DELETE FROM movies WHERE mv_id = $movie_id");
+        // Set a success message in the session to be displayed after redirection
+        Session::set('success-message', 'Movie Deleted Successfully ');
+        // Redirect to the list-movie.php page after deleting the movie
+        header('Location: list-movie.php');
+        exit();
     }
 }

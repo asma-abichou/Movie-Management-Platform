@@ -24,6 +24,7 @@ include "../session.php";
     <meta name="theme-color" content="#ffffff">
     <link href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="../css/jquery.toast.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/jquery-confirm.min.css" rel="stylesheet" type="text/css">
 
     <!-- Include English language -->
     <script src="js/plugins/datepicker/dist/js/i18n/datepicker.en.js"></script>
@@ -234,7 +235,7 @@ include "../session.php";
                                 <td style="width:15px"><img src="../<?=$movie['img_path']?>" height="25px" width="25px"></td>
                                 <td style="width:15px">
                                     <a href="edit-movie.php?id=<?= $movie['mv_id'] ?>">edit</a>
-                                    <a href="admin.php?action=edit-movie">delete</a>
+                                    <a class="delete-movie" data-movie-id="<?= $movie['mv_id'] ?>" href="#">delete</a>
                                 </td>
                         </tr>
                     <?php } ?>
@@ -259,6 +260,7 @@ include "../session.php";
 </div>
     </div>
 <script src="../js/jquery.toast.min.js"></script>
+<script src="../js/jquery-confirm.min.js"></script>
 <?php if(Session::exists('success-message')) { ?>
 <script>
     $.toast({
@@ -268,14 +270,36 @@ include "../session.php";
         textColor : '#eee',            // text color
         allowToastClose : false,       // Show the close button or not
         hideAfter : 5000,              // `false` to make it sticky or time in miliseconds to hide after
-        stack : 5,                     // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
+        stack : 5,                     // `false` to show one stack at a time count showing the number of toasts that can be shown at once
         textAlign : 'left',            // Alignment of text i.e. left, right, center
         position : 'bottom-left'
-        // loader: true, // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
     })
 </script>
 <?php }
    Session::destroy('success-message');
 ?>
+<script>
+    $('.delete-movie').click(function(){
+        let movie_id = $(this).attr('data-movie-id');
+
+        $.confirm({
+            title: 'Confirm!',
+            content: 'Are You Sure To Delete This Movie ?!',
+                buttons: {
+                    cancel: function () {
+
+                    },
+                Yes: {
+                    text: 'Yes',
+                    btnClass: 'btn-blue',
+                    keys: ['enter', 'shift'],
+                    action: function(){
+                        window.location.href="list-movies?action=delete-movie&movie-id="+movie_id;
+                    }
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
