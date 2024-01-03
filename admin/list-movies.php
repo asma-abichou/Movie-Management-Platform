@@ -1,5 +1,19 @@
 <?php
-include "../session.php";
+include_once "../session.php";
+include_once "../MoviesController.php";
+
+$moviesController = new MoviesController();
+
+$per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 10;
+$movies = $moviesController->getMovies($per_page);
+
+//$pagination_links = $moviesController->pagination_links;
+
+if(isset($_GET['action']) && $_GET['action'] == "delete-movie"){
+    $movie_id = $_GET['movie_id'];
+    $moviesController->deleteMovie($movie_id);
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -289,7 +303,7 @@ include "../session.php";
                     cancel: function () {
 
                     },
-                Yes: {
+                yes: {
                     text: 'Yes',
                     btnClass: 'btn-blue',
                     keys: ['enter', 'shift'],

@@ -132,7 +132,7 @@ class MoviesController
         // Set a success message in the session to be displayed after redirection
         Session::set('success-message', 'Movie Deleted Successfully ');
         // Redirect to the list-movie.php page after deleting the movie
-        header('Location: list-movie.php');
+        header('Location: list-movies.php');
         exit();
     }
 }
