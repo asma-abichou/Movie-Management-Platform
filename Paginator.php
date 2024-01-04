@@ -40,14 +40,48 @@ class Paginator{
             if($this->page == $page){
                 $is_link_active ="active";
             }
-            $this->pagination_links .= "
-            <li class ='".$is_link_active."page-item'>
-                 <a href=''>$page</a>
-            </li>
-            ";
+            $query_strings = $this->get_query_strings();
+            $request_url = $this->get_request_path()."?".http_build_query($query_strings);
 
+            $this->pagination_links .= $this->create_html_for_pagination_links($page,$request_url,$page,$is_link_active);
         }
         echo $this->pagination_links;
+    }
+
+    public function create_html_for_pagination_links($page_number,$request_url,$page_value,$is_link_active='')
+    {
+        return " <li class ='page-item" . $is_link_active . "'>
+                    <a class='page-link' href='$request_url&page=$page_number' class='page-link'>$page_value</a>
+                 </li>
+        ";
+    }
+    public function get_query_strings(){
+        parse_str($_SERVER['QUERY_STRING'],$query_strings);
+        return $query_strings;
+    }
+    public function create_previous(){
+        if($this->page>1){
+            //show 'Previous' only if page number is greater than 1
+            $previous_page = $this->page-1;
+            $query_strings = $this->get_query_strings();
+            unset($query_strings['page']);
+            $request_url = $this->get_request_path()."?".http_build_query($query_strings);
+            $this->pagination_links .= $this->create_html_for_pagination_links($previous_page,$request_url,"Previous");
+
+        }
+    }
+    public function create_next(){
+        if($this->last_page != 1){
+            if($this->page != 1 && $this->page != $this->last_page){
+                $next_page = $this->page + 1;
+                $query_strings = $this->get_query_strings();
+                unset($query_strings['page']);
+                $request_url = $this->get_request_path()."?".http_build_query($query_strings);
+                $this->pagination_links .= $this->create_html_for_pagination_links($next_page,$request_url,"Next");
+            }
+            
+        }
+
     }
 
 }
