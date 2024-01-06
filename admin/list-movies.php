@@ -229,6 +229,7 @@ if(isset($_GET['action']) && $_GET['action'] == "delete-movie"){
                 $moviesController = new MoviesController();
                 $movies = $moviesController->getMovies();
 
+
                 $pagination_links = $moviesController->pagination_links;
                 ?>
                     <ul style="display:flex;margin-left: auto" class="paginator-ul">
