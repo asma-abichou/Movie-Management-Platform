@@ -1,8 +1,10 @@
 <?php
 include_once "Crud.php";
+include_once "Paginator.php";
 class MoviesController
 {
     private Crud $crud;
+    public $pagination_links;
     public function __construct()
     {
         $this->crud = new Crud();
@@ -52,7 +54,13 @@ class MoviesController
                     LEFT JOIN images on img_ref_movie = mv_id
                     GROUP BY mv_id
                     ORDER BY mv_id DESC";
+        $rows_found = count($this->crud->read($query));
+
+        $paginator = new Paginator($rows_found,5);
+        $offset_and_limit = $paginator->get_offset_and_limit();
+        $query .= " " . $offset_and_limit;
         $results = $this->crud->read($query);
+        $this->pagination_links = $paginator->get_pagination_links();
         return $results;
     }
 

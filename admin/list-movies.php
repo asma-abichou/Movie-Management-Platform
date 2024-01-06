@@ -221,22 +221,20 @@ if(isset($_GET['action']) && $_GET['action'] == "delete-movie"){
                         </li>
                         <li>entries</li>
                     </ul>
-                    <ul style="display:flex;margin-left: auto" class="paginator-ul">
-                        <li class='page-item active'>
-                            <a class = 'page-link'  href='#' class = 'page-link'>1</a>
-                        </li><li class='page-item '>
-                            <a class = 'page-link'  href='#' class = 'page-link'>2</a>
-                        </li>
-                        <li class='page-item '>
-                            <a class = 'page-link'  href='#' class = 'page-link'>3</a>
-                        </li>                    
-                    </ul>
-                </div>
+
+
                 <?php
                 include_once "../MoviesController.php";
+                include_once "Paginator.php";
                 $moviesController = new MoviesController();
                 $movies = $moviesController->getMovies();
+
+                $pagination_links = $moviesController->pagination_links;
                 ?>
+                    <ul style="display:flex;margin-left: auto" class="paginator-ul">
+                        <?= $pagination_links ?>
+                    </ul>
+                </div>
                 <table id="movies">
                     <tr>
                         <th>Movie Title</th> <th>Genre(s)</th> <th>Year Released</th><th>Cover Imagge</th> <th>Actions</th>
