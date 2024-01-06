@@ -45,7 +45,6 @@ class Paginator{
 
             $this->pagination_links .= $this->create_html_for_pagination_links($page,$request_url,$page,$is_link_active);
         }
-        echo $this->pagination_links;
     }
 
     public function create_html_for_pagination_links($page_number,$request_url,$page_value,$is_link_active='')
@@ -79,9 +78,19 @@ class Paginator{
                 $request_url = $this->get_request_path()."?".http_build_query($query_strings);
                 $this->pagination_links .= $this->create_html_for_pagination_links($next_page,$request_url,"Next");
             }
-            
         }
 
     }
+    public function get_pagination_links()
+    {
+        $this->create_previous();
+        $this->create_pagination_links();
+        $this->create_next();
 
+        return $this->pagination_links;
+    }
+    public function get_offset_and_limit()
+    {
+            return "LIMIT ".($this->page - 1) * $this->per_page.",". $this->per_page;
+    }
 }
