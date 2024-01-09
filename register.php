@@ -1,4 +1,9 @@
 <?php
+if(isset($_SESSION["user"]))
+{
+    header('location: admin/list-movies.php');
+    die();
+}
 // REGISTER USER
 if (isset($_POST['password'])) {
     include_once "DBConfig.php";
@@ -28,7 +33,6 @@ if (isset($_POST['password'])) {
         header('location: register.php');
     }
     if ($password != $confirmPassword) {
-        die();
         $_SESSION["registration_fail_message"] = "The two passwords do not match";
         header('location: register.php');
         die();
@@ -50,16 +54,10 @@ if (isset($_POST['password'])) {
     // Finally, register user if there are no errors in the form
     if (count($errors) == 0) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // encrypt the password before saving in the database
-        /*var_dump($password);
-        die();*/
         $registerUserQuery = "INSERT INTO users (full_name, email, password) VALUES (:fullName, :email, :password)";
         $stmt = $dbConnection->prepare($registerUserQuery);
         $stmt->execute(['fullName' => $fullName, 'email' => $email, 'password' => $hashedPassword]);
         $registeredUserId = $dbConnection->lastInsertId();
-       /* var_dump($registeredUserId);
-        die();*/
-
-        // $_SESSION['success'] = "You are now logged in";
         header('location: login.php'); // Change this to the appropriate redirect page
         exit();
     }

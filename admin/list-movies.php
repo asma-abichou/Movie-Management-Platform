@@ -2,6 +2,12 @@
 include_once "../session.php";
 include_once "../MoviesController.php";
 
+if(!isset($_SESSION["user"]))
+{
+    header('location: ../index.php');
+    die();
+}
+
 $moviesController = new MoviesController();
 
 $per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 10;
@@ -72,7 +78,7 @@ if(isset($_GET['action']) && $_GET['action'] == "delete-movie"){
                         <div class = "sidebar-row">
                             <img src="../images/admin.jpg" height="60px" width="60px">
                             <ul id="button-container">
-                                <li><strong><i>Welcome!</i> John Doe</strong><span class="active"></span></li>
+                                <li><strong><i>Welcome! </i><?php echo $_SESSION["user"]["full_name"]?></strong><span class="active"></span></li>
                                 <li style="color:#4f5967; font-size:10px;font-weight: 800">ADMINISTRATOR</li>
                                 <li>
                                     <button class = "btn btn-edit-profile">Edit Profile</button>
@@ -177,9 +183,13 @@ if(isset($_GET['action']) && $_GET['action'] == "delete-movie"){
                         </li>
                         <li>
                             <a class="nav-link">
-                                John Doe
+                                <?php echo $_SESSION["user"]["full_name"]?>
                                 <i class="fas fa-chevron-down"></i>
                             </a>
+                            <a class="nav-link" href="../logout.php">
+                                Log Out
+                            </a>
+
                         </li>
                     </ul>
             </div>

@@ -1,13 +1,17 @@
 <?php
 include "../session.php";
-/*Session::start();*/
+if(!isset($_SESSION["user"]))
+{
+    header('location: ../index.php');
+    die();
+}
 
-    if(($_SERVER['REQUEST_METHOD'] == 'POST')){
-        include_once "../MoviesController.php";
+if(($_SERVER['REQUEST_METHOD'] == 'POST')){
+    include_once "../MoviesController.php";
 
-        $moviesController = new MoviesController();
-        $moviesController->addMovie();
-    }
+    $moviesController = new MoviesController();
+    $moviesController->addMovie();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

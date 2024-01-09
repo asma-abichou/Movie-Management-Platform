@@ -1,7 +1,13 @@
 <?php
-    include "../session.php";
-
+include "../session.php";
 include_once "../MoviesController.php";
+
+if(!isset($_SESSION["user"]))
+{
+    header('location: ../index.php');
+    die();
+}
+
 $moviesController = new MoviesController();
 $movie = $moviesController->getMovie($_GET['id']);
 
@@ -15,8 +21,6 @@ $movie = $moviesController->getMovie($_GET['id']);
 <head>
     <meta charset="UTF-8">
     <title>Movies</title>
-    <meta charset="utf-8">
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
