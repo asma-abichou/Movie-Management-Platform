@@ -3,8 +3,8 @@
 function getDbConnection(){
 
     $servername = "localhost";
-    $username= "root";
-    $password= "";
+    $username= "asma";
+    $password= "asma";
     $dbname = "mms";
     try
     {
