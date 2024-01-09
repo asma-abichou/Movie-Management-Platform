@@ -1,18 +1,4 @@
 <?php
-
-//var_dump($_POST);
-
-// initializing variables
-
-
-// connect to the database
-// $db = mysqli_connect('localhost', 'asma', 'asma', 'mms');
-
-// Check connection
-/*if (!$db) {
-    die("Connection failed: " . mysqli_connect_error());
-}*/
-
 // REGISTER USER
 if (isset($_POST['password'])) {
     include_once "DBConfig.php";

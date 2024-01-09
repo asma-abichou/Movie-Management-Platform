@@ -1,9 +1,40 @@
 
+<?php
 
+// Now we check if the data from the login form was submitted, isset() will check if the data exists.
+if ( isset($_POST['email'])) {
+    include_once "DBConfig.php";
+    $dbConnection = getDbConnection();
+
+    if(empty($_POST["username"]) || empty($_POST["password"]))
+    {
+        $message = '<label>All fields are required</label>';
+    }else{
+        $query = $dbConnection->prepare('SELECT id, password FROM users WHERE email = :email AND password = :password');
+            $statement = $dbConnection->prepare($query);
+            $statement->execute(
+                array(
+                    'email'     =>     $_POST["email"],
+                    'password'     =>     $_POST["password"]
+                )
+            );
+            $count = $statement->rowCount();
+            if($count > 0)
+            {
+                $_SESSION["username"] = $_POST["username"];
+                header("location:list-movie.php");
+            }
+            else
+            {
+                $message = '<label>Wrong Data</label>';
+            }
+        }
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Registration system PHP and MySQL</title>
+  <title>Login</title>
   <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://www.phptutorial.net/app/css/style.css">
 </head>
@@ -12,12 +43,11 @@
     <div class="header">
         <h2>Login</h2>
     </div>
-
     <form method="post" action="login.php">
-        <?php include('errors.php'); ?>
+
         <div class="input-group">
-            <label>Username</label>
-            <input type="text" name="username" >
+            <label>Email</label>
+            <input type="text" name="email" >
         </div>
         <div class="input-group">
             <label>Password</label>
