@@ -1,10 +1,13 @@
 <?php
+// Check if user is already logged in, redirect to admin page
 if(isset($_SESSION["user"]))
 {
     header('location: admin/list-movies.php');
     die();
 }
 // REGISTER USER
+
+// Check if the registration form is submitted
 if (isset($_POST['password'])) {
     include_once "DBConfig.php";
     $dbConnection = getDbConnection();
@@ -38,26 +41,28 @@ if (isset($_POST['password'])) {
         die();
     }
 
-    // first check the database to make sure
-    // a user does not already exist with the same username and/or email
+    // Check if the user already exists in the database
     $user_check_query = "SELECT * FROM users WHERE email = :userEmail";
     $stmt = $dbConnection->prepare($user_check_query);
     $stmt->execute(['userEmail' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-   /* var_dump($user);
-    die();*/
 
+   // If user already exists, add an error
     if ($user) { // if user exists
         array_push($errors, "Email already exists!");
     }
 
-    // Finally, register user if there are no errors in the form
+    // Register the user if there are no errors
     if (count($errors) == 0) {
+        // Encrypt the password before saving in the database
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // encrypt the password before saving in the database
+        // Insert user data into the database
         $registerUserQuery = "INSERT INTO users (full_name, email, password) VALUES (:fullName, :email, :password)";
         $stmt = $dbConnection->prepare($registerUserQuery);
         $stmt->execute(['fullName' => $fullName, 'email' => $email, 'password' => $hashedPassword]);
+        // Get the ID of the newly registered user
         $registeredUserId = $dbConnection->lastInsertId();
+        // Redirect to the login page
         header('location: login.php'); // Change this to the appropriate redirect page
         exit();
     }

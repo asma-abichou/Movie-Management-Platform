@@ -1,32 +1,37 @@
 <?php
+// Check if the user is already logged in, redirect to the admin page
 if(isset($_SESSION["user"]))
 {
     header('location: admin/list-movies.php');
     die();
 }
+
 // Now we check if the data from the login form was submitted, isset() will check if the data exists.
 if (isset($_POST['email'])) {
     // Assuming 'login_user' is the name of the submit button
     include_once "DBConfig.php";
     $dbConnection = getDbConnection();
-
-    $email = $_POST["email"]; // Retrieve email from POST data
-    $password = $_POST["password"]; // Retrieve password from POST data
-
+    // Retrieve email and password from the POST data
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    // Check if email and password are provided
     if (empty($email) || empty($password)) {
         $_SESSION["login_fail_message"] = "Email and password are required!";
         header('location: login.php');
         die();
     } else {
+        // Query the database to fetch user data based on the provided email
         $query = $dbConnection->prepare('SELECT id, email, full_name, password FROM users WHERE email = :email');
         $query->execute(['email' => $email]);
         $user = $query->fetch(PDO::FETCH_ASSOC);
+        // Check if the user exists and the provided password is correct
         if ($user && password_verify($password, $user['password'])) {
-
+            // Set user session and redirect to the admin page
             $_SESSION["user"] = $user;
             header("location: admin/list-movies.php");
             die();
         } else {
+            // Display an error message for wrong email or password
             $_SESSION["login_fail_message"] = "Wrong email or password!";
             header('location: login.php');
             die();
@@ -44,7 +49,6 @@ if (isset($_POST['email'])) {
 <body>
 <main>
     <?php
-
     if (isset($_SESSION["login_fail_message"])) {
         $errorMessages = $_SESSION["login_fail_message"];
         unset($_SESSION["login_fail_message"]);

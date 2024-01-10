@@ -47,10 +47,10 @@
             </form></section>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active btn-signup">
-            <a class="nav-link" href="http://localhost/movies_/#" style="color:black !important;">Sign Up <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="register.php" style="color:black !important;">Register<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item btn-signin">
-                <a class="nav-link" href="http://localhost/movies_/#">Sign In</a>
+                <a class="nav-link" href="login.php">Sign In</a>
             </li>
         </ul>
 
