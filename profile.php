@@ -1,4 +1,54 @@
 <?php
+if (isset($_POST['userprofileupdate'])) {
+    include_once "DBConfig.php";
+    $dbConnection = getDbConnection();
+    // receive all input values from the form
+    $fullName = $_POST['fullName'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $confirmPassword = $_POST['password2'];
+    $firstname = mysqli_real_escape_string($conn, $_POST['name_1']);
+    $lastname = mysqli_real_escape_string($conn, $_POST['name_2']);
+    $email = mysqli_real_escape_string($conn, $_POST['email_1']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+
+    // Check if Email exists
+    $stmt = $pdo->prepare('SELECT * FROM `users` WHERE `email` = :email ');
+    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $Count = $stmt->rowCount();
+
+    // Check if username exists
+    $stmt = $pdo->prepare('SELECT * FROM `users` WHERE `username` = :username ');
+    $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $Count1 = $stmt->rowCount();
+
+    if ($Count < 1) {
+        if ($Count1 < 1) {
+            $query = "UPDATE users SET username=?, firstname=?, lastname=?, email=? WHERE id=?";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam('ssssi', $username, $firstname, $lastname, $email, $id);
+            $stmt->execute();
+
+            unset($_SESSION['username']);
+            unset($_SESSION['firstname']);
+            unset($_SESSION['lastname']);
+            unset($_SESSION['role']);
+            unset($_SESSION['email']);
+            unset($_SESSION['password']);
+            session_destroy();
+
+            header('Location: /panel/login?profile_changed');
+        } else {
+            header('Location: /panel/profile?username_taken');
+        }
+    } else {
+        header('Location: /panel/profile?email_taken');
+    }
+}
 ?>
 
 <!doctype html>
