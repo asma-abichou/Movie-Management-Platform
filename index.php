@@ -49,8 +49,11 @@
             <li class="nav-item active btn-signup">
             <a class="nav-link" href="register.php" style="color:black !important;">Register<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item btn-signin">
-                <a class="nav-link" href="login.php">Sign In</a>
+            <li class="nav-item ">
+                <a class="nav-link" href="login.php" style="color:black !important;">Sign In</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="currentPassword.php" style="color:white !important;">Change Password</a>
             </li>
         </ul>
 

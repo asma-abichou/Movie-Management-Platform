@@ -91,6 +91,6 @@ class Paginator{
     }
     public function get_offset_and_limit()
     {
-            return "LIMIT ".($this->page - 1) * $this->per_page.",". $this->per_page;
+            return "LIMIT ".($this->page - 1) * $this->per_page;
     }
 }

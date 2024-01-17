@@ -1,57 +1,65 @@
 <?php
-if (isset($_POST['userprofileupdate'])) {
-    include_once "DBConfig.php";
-    $dbConnection = getDbConnection();
-    // receive all input values from the form
+
+include_once "DBConfig.php"; // Include your database configuration file
+$dbConnection = getDbConnection();
+if (!isset($_SESSION['user'])) {
+    header('location: login.php'); // Redirect to login page if not logged in
+    exit();
+}
+
+$idUser = $_SESSION['user']['id'];
+
+// Fetch user data from the database
+$query = "SELECT * FROM users WHERE id = :id";
+$stmt = $dbConnection->prepare($query);
+$stmt->execute(['id' => $idUser]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    echo "User not found!";
+    exit();
+}
+
+$errors = [];
+
+if (isset($_POST['update_profile'])) {
+    // Receive input values from the form
     $fullName = $_POST['fullName'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirmPassword = $_POST['password2'];
-    $firstname = mysqli_real_escape_string($conn, $_POST['name_1']);
-    $lastname = mysqli_real_escape_string($conn, $_POST['name_2']);
-    $email = mysqli_real_escape_string($conn, $_POST['email_1']);
-    $username = mysqli_real_escape_string($conn, $_POST['username']);
 
-    // Check if Email exists
-    $stmt = $pdo->prepare('SELECT * FROM `users` WHERE `email` = :email ');
-    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-    $stmt->execute();
+    // Validation
+    if (empty($fullName)) {
+        $errors[] = "Full name is required!";
+    }
+    if (empty($email)) {
+        $errors[] = "Email is required!";
+    }
 
-    $Count = $stmt->rowCount();
+    if (empty($errors)) {
+        // Update user information in the database
+        $updateQuery = "UPDATE users SET full_name = :fullName, email = :email WHERE id = :id";
+        $updateStmt = $dbConnection->prepare($updateQuery);
 
-    // Check if username exists
-    $stmt = $pdo->prepare('SELECT * FROM `users` WHERE `username` = :username ');
-    $stmt->bindParam(":username", $username, PDO::PARAM_STR);
-    $stmt->execute();
+        $success = $updateStmt->execute(['fullName' => $fullName, 'email' => $email, 'id' => $idUser]);
 
-    $Count1 = $stmt->rowCount();
+        if ($success) {
+            // Reload updated user data
+            $stmt->execute(['id' => $idUser]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['user'] = $user;  // Update the session with fresh user data
 
-    if ($Count < 1) {
-        if ($Count1 < 1) {
-            $query = "UPDATE users SET username=?, firstname=?, lastname=?, email=? WHERE id=?";
-            $stmt = $pdo->prepare($query);
-            $stmt->bindParam('ssssi', $username, $firstname, $lastname, $email, $id);
-            $stmt->execute();
-
-            unset($_SESSION['username']);
-            unset($_SESSION['firstname']);
-            unset($_SESSION['lastname']);
-            unset($_SESSION['role']);
-            unset($_SESSION['email']);
-            unset($_SESSION['password']);
-            session_destroy();
-
-            header('Location: /panel/login?profile_changed');
+            $_SESSION['editInfo_success_message'] = "Profile updated successfully!";
+            header('location: admin/list-movies.php');
+            exit();
         } else {
-            header('Location: /panel/profile?username_taken');
+            $_SESSION['editInfo_fail_message'] = "Error updating profile. Please try again.";
+            header('location: profile.php');
+            exit();
         }
-    } else {
-        header('Location: /panel/profile?email_taken');
     }
 }
 ?>
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
@@ -61,9 +69,9 @@ if (isset($_POST['userprofileupdate'])) {
     <script src="script.js"></script>
 </head>
 <body>
-<div class="container-xl px-4 mt-4">
-    <form>
-        <!-- Account page navigation-->
+<main>
+    <div class="container-xl px-4 mt-4">
+    <!-- Account page navigation-->
     <nav class="nav nav-borders">
         <a class="nav-link active ms-0" href="https://www.bootdey.com/snippets/view/bs5-edit-profile-account-details" target="__blank">Profile</a>
     </nav>
@@ -88,28 +96,39 @@ if (isset($_POST['userprofileupdate'])) {
             <div class="card mb-4">
                 <div class="card-header">Account Details</div>
                 <div class="card-body">
-                    <form>
+                    <div>
+                        <?php if (!empty($errors)) : ?>
+                            <ul style="color: red;">
+                                <?php foreach ($errors as $error) : ?>
+                                    <li><?php echo $error; ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </div>
+                    <form action="profile.php" method="post">
                         <!-- Form Group (username)-->
                         <div class="mb-3">
-                            <label class="small mb-1" for="inputUsername">Full Name (how your name will appear to other users on the site)</label>
-                            <input class="form-control" id="inputFullName" type="text" placeholder="Enter your Full Name" value="<?php echo $_SESSION["user"]["full_name"]?>">
+                            <label class="small mb-1" for="inputUsername">Full Name</label>
+                            <input class="form-control" id="inputFullName" type="text" name="fullName" placeholder="Enter your Full Name" value="<?php echo $_SESSION["user"]["full_name"]?>">
                         </div>
                         <!-- Form Group (email address)-->
                         <div class="mb-3">
                             <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                            <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="<?php echo $_SESSION["user"]["email"]?>">
+                            <input class="form-control" id="inputEmailAddress" type="email" name="email" placeholder="Enter your email address" value="<?php echo $_SESSION["user"]["email"]?>">
+                        </div>
+                        <div>
+                            <input type="text" name="idUser" value="<?php echo $_SESSION["user"]["id"]?>" hidden="">
                         </div>
                         <!-- Save changes button-->
-                        <button class="btn btn-primary" type="button">Save changes</button>
+                        <button class="btn btn-primary" type="submit" name="update_profile">Save changes</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+</main>
 </body>
 </html>
 

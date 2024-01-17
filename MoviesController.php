@@ -45,21 +45,23 @@ class MoviesController
     }
 
     //get the movies from the DataBase and return them
-    public function getMovies(){
-        //give all genres movies
-        $query = "SELECT mv_id, mv_title,img_path, gnr_name, GROUP_CONCAT(gnr_name) genres, mv_year_released
-                     FROM `movies`
-                    LEFT JOIN mv_genres on mvg_ref_movie = mv_id 
-                    LEFT JOIN genres on mvg_ref_genre = gnr_id
-                    LEFT JOIN images on img_ref_movie = mv_id
-                    GROUP BY mv_id
-                    ORDER BY mv_id DESC";
-        $rows_found = count($this->crud->read($query));
+    public function getMovies() {
+        // Give all genres movies
+        $query = "SELECT mv_id, mv_title, img_path, gnr_name, GROUP_CONCAT(gnr_name) genres, mv_year_released
+              FROM `movies`
+              LEFT JOIN mv_genres ON mvg_ref_movie = mv_id 
+              LEFT JOIN genres ON mvg_ref_genre = gnr_id
+              LEFT JOIN images ON img_ref_movie = mv_id
+              GROUP BY mv_id
+              ORDER BY mv_id DESC";
 
-        $paginator = new Paginator($rows_found,5);
-        $offset_and_limit = $paginator->get_offset_and_limit();
-        $query .= " " . $offset_and_limit;
+        // Count the total number of rows
+        $rows_found = count($this->crud->read($query));
+        // Initialize Paginator
+        $paginator = new Paginator($rows_found, 4);
+        // Fetch paginated results
         $results = $this->crud->read($query);
+        // Get pagination links
         $this->pagination_links = $paginator->get_pagination_links();
         return $results;
     }
