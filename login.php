@@ -58,13 +58,12 @@ if (isset($_POST['email'])) {
         <h2>Login</h2>
     </div>
     <form method="post" action="login.php">
-
-        <?php
-        if (isset($errorMessages))
-        {
-            echo "<div style='color: red'>$errorMessages</div>";
-        }
-        ?>
+            <?php
+            if (isset($errorMessages))
+            {
+                echo "<div style='color: red'>$errorMessages</div>";
+            }
+            ?>
         <div class="input-group">
             <label>Email</label>
             <input type="email" name="email" >

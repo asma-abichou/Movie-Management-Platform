@@ -1,25 +1,25 @@
 <?php
-include_once "../session.php";
-include_once "../MoviesController.php";
+    include_once "../session.php";
+    include_once "../MoviesController.php";
 
-if(!isset($_SESSION["user"]))
-{
-    header('location: ../index.php');
-    die();
-}
+    if(!isset($_SESSION["user"]))
+    {
+        header('location: ../index.php');
+        die();
+    }
 
-$moviesController = new MoviesController();
+    $moviesController = new MoviesController();
 
-$per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 10;
-$movies = $moviesController->getMovies($per_page);
+    $per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 10;
+    $movies = $moviesController->getMovies($per_page);
 
-//$pagination_links = $moviesController->pagination_links;
+    //$pagination_links = $moviesController->pagination_links;
 
-if(isset($_GET['action']) && $_GET['action'] == "delete-movie"){
-    $movie_id = $_GET['movie_id'];
-    $moviesController->deleteMovie($movie_id);
+    if(isset($_GET['action']) && $_GET['action'] == "delete-movie"){
+        $movie_id = $_GET['movie_id'];
+        $moviesController->deleteMovie($movie_id);
 
-}
+    }
 ?>
 
 <!DOCTYPE html>
@@ -189,6 +189,11 @@ if(isset($_GET['action']) && $_GET['action'] == "delete-movie"){
                             <a class="nav-link" href="../logout.php">
                                 Log Out
                             </a>
+
+                            <a class="nav-link" href="../currentPassword.php">
+                                Change Password
+                            </a>
+
 
                         </li>
                     </ul>

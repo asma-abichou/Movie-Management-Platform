@@ -50,13 +50,10 @@
             <a class="nav-link" href="register.php" style="color:black !important;">Register<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" href="login.php" style="color:black !important;">Sign In</a>
+                <a class="nav-link" href="login.php" style="color:white !important;">Sign In</a>
             </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="currentPassword.php" style="color:white !important;">Change Password</a>
-            </li>
-        </ul>
 
+        </ul>
     </div>
 </nav>
 </header>

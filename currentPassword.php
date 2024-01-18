@@ -2,27 +2,22 @@
 include_once "DBConfig.php";
 
 // Assuming the stored password is hashed
-    $correctCurrentPasswordHash = $_SESSION["user"]["password"];
+$correctCurrentPasswordHash = $_SESSION["user"]["password"];
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST['change_password_user'])) {
     $enteredPassword = $_POST["currentPassword"];
-
-    // Use password_verify to compare the entered password with the hashed stored password
     if (password_verify($enteredPassword, $correctCurrentPasswordHash)) {
-    // Password is correct, redirect to the form to set a new password
-    header("Location: changePassword.php");
-    exit();
+        // Set a session variable to indicate that current password is verified
+        $_SESSION['current_password_verified'] = true;
+        header("Location: changePassword.php");
+        exit();
     } else {
-    // Incorrect password, show an error message
-    $_SESSION["password_verification_fail_message"] = "Incorrect current password!";
-    header("Location: currentPassword.php");
-    exit();
+        // Incorrect password, show an error message
+        $_SESSION["password_verification_fail_message"] = "Incorrect current password!";
+        header("Location: currentPassword.php");
+        exit();
     }
-    } else {
-    // Redirect to the current password form if accessed directly without submitting the form
-    header("Location: currentPassword.php");
-    exit();
-    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +29,13 @@ include_once "DBConfig.php";
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
+   <main>
+       <?php
+       if (isset($_SESSION["password_verification_fail_message"])) {
+           $errorPassword = $_SESSION["password_verification_fail_message"];
+           unset($_SESSION["password_verification_fail_message"]);
+       }
+       ?>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -44,6 +46,12 @@ include_once "DBConfig.php";
                 </div>
                 <div class="card-body">
                     <form action="currentPassword.php" method="post">
+                        <?php
+                        if (isset($errorPassword))
+                        {
+                            echo "<div style='color: red'>$errorPassword</div>";
+                        }
+                        ?>
                         <!-- Current Password -->
                         <div class="mb-3">
                             <label for="currentPassword" class="form-label">Current Password</label>
@@ -51,7 +59,7 @@ include_once "DBConfig.php";
                         </div>
 
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Verify Password</button>
+                            <button type="submit" class="btn btn-primary" name="change_password_user">Verify Password</button>
                         </div>
                     </form>
                 </div>
@@ -62,6 +70,6 @@ include_once "DBConfig.php";
 
 <!-- Bootstrap JS and Popper.js (Optional) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+   </main>
 </body>
 </html>

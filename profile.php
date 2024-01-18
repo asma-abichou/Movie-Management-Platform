@@ -1,39 +1,39 @@
 <?php
 
-include_once "DBConfig.php"; // Include your database configuration file
-$dbConnection = getDbConnection();
-if (!isset($_SESSION['user'])) {
-    header('location: login.php'); // Redirect to login page if not logged in
-    exit();
-}
-
-$idUser = $_SESSION['user']['id'];
-
-// Fetch user data from the database
-$query = "SELECT * FROM users WHERE id = :id";
-$stmt = $dbConnection->prepare($query);
-$stmt->execute(['id' => $idUser]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$user) {
-    echo "User not found!";
-    exit();
-}
-
-$errors = [];
-
-if (isset($_POST['update_profile'])) {
-    // Receive input values from the form
-    $fullName = $_POST['fullName'];
-    $email = $_POST['email'];
-
-    // Validation
-    if (empty($fullName)) {
-        $errors[] = "Full name is required!";
+    include_once "DBConfig.php"; // Include your database configuration file
+    $dbConnection = getDbConnection();
+    if (!isset($_SESSION['user'])) {
+        header('location: login.php'); // Redirect to login page if not logged in
+        exit();
     }
-    if (empty($email)) {
-        $errors[] = "Email is required!";
+
+    $idUser = $_SESSION['user']['id'];
+
+    // Fetch user data from the database
+    $query = "SELECT * FROM users WHERE id = :id";
+    $stmt = $dbConnection->prepare($query);
+    $stmt->execute(['id' => $idUser]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user) {
+        echo "User not found!";
+        exit();
     }
+
+    $errors = [];
+
+    if (isset($_POST['update_profile'])) {
+        // Receive input values from the form
+        $fullName = $_POST['fullName'];
+        $email = $_POST['email'];
+
+        // Validation
+        if (empty($fullName)) {
+            $errors[] = "Full name is required!";
+        }
+        if (empty($email)) {
+            $errors[] = "Email is required!";
+        }
 
     if (empty($errors)) {
         // Update user information in the database
