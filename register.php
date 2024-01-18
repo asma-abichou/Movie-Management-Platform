@@ -5,7 +5,6 @@ if(isset($_SESSION["user"]))
     header('location: admin/list-movies.php');
     die();
 }
-// REGISTER USER
 
 // Check if the registration form is submitted
 if (isset($_POST['password'])) {
@@ -62,6 +61,8 @@ if (isset($_POST['password'])) {
         $stmt->execute(['fullName' => $fullName, 'email' => $email, 'password' => $hashedPassword]);
         // Get the ID of the newly registered user
         $registeredUserId = $dbConnection->lastInsertId();
+        $_SESSION["registration_success_message"] = "Registration successful! You can now log in.";
+
         // Redirect to the login page
         header('location: login.php'); // Change this to the appropriate redirect page
         exit();
@@ -75,16 +76,10 @@ if (isset($_POST['password'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.phptutorial.net/app/css/style.css">
     <title>Register</title>
+
 </head>
 <body>
 <main>
-    <?php
-    if(isset($_SESSION["registration_fail_message"]))
-    {
-        $errorMessage = $_SESSION["registration_fail_message"]; // msg: full name is required!
-        unset($_SESSION["registration_fail_message"]);
-    }
-    ?>
     <form action="register.php" method="post">
         <h1>Sign Up</h1>
         <?php

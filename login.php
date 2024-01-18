@@ -45,9 +45,57 @@ if (isset($_POST['email'])) {
   <title>Login</title>
   <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://www.phptutorial.net/app/css/style.css">
+    <style>
+        #success-message {
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text color */
+            padding: 15px; /* Some padding */
+            position: fixed; /* Fixed position */
+            bottom: 0; /* At the bottom */
+            left: 0;
+            width: 100%; /* Full width */
+            text-align: center; /* Centered text */
+            animation: slideIn 0.5s ease-out; /* Animation */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+            opacity: 0.9; /* Slightly transparent */
+        }
+
+        #success-message:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        #success-message::before {
+            content: "\2713"; /* Unicode checkmark symbol */
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
 <main>
+    <?php
+    if (isset($_SESSION["registration_fail_message"])) {
+        $errorMessage = $_SESSION["registration_fail_message"];
+        unset($_SESSION["registration_fail_message"]);
+    }
+
+    // Display success message with animation if it exists
+    if (isset($_SESSION["registration_success_message"])) {
+        $successMessage = $_SESSION["registration_success_message"];
+        unset($_SESSION["registration_success_message"]);
+        echo "<div id='success-message'>$successMessage</div>";
+    }
+    ?>
     <?php
     if (isset($_SESSION["login_fail_message"])) {
         $errorMessages = $_SESSION["login_fail_message"];
@@ -81,6 +129,5 @@ if (isset($_POST['email'])) {
         </p>
     </form>
 </main>
-
 </body>
 </html>
