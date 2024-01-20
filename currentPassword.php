@@ -5,6 +5,7 @@ include_once "DBConfig.php";
 $correctCurrentPasswordHash = $_SESSION["user"]["password"];
 
 if (isset($_POST['change_password_user'])) {
+
     $enteredPassword = $_POST["currentPassword"];
     if (password_verify($enteredPassword, $correctCurrentPasswordHash)) {
         // Set a session variable to indicate that current password is verified

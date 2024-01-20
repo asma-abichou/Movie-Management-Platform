@@ -10,7 +10,7 @@
 
     $moviesController = new MoviesController();
 
-    $per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 10;
+    $per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 5;
     $movies = $moviesController->getMovies($per_page);
 
     //$pagination_links = $moviesController->pagination_links;
@@ -62,6 +62,8 @@
     </style>
 </head>
 <body>
+<main>
+
 <div class="container-fluid">
     <div class="row">
      <div class ="col-sm-12" style="padding-left:0px;padding-right:0px;">
@@ -78,10 +80,10 @@
                         <div class = "sidebar-row">
                             <img src="../images/admin.jpg" height="60px" width="60px">
                             <ul id="button-container">
-                                <li><strong><i>Welcome! </i><?php echo $_SESSION["user"]["full_name"]?></strong><span class="active"></span></li>
+                                <li><strong><?php echo $_SESSION["user"]["full_name"]?></strong><span class="active"></span></li>
                                 <li style="color:#4f5967; font-size:10px;font-weight: 800">ADMINISTRATOR</li>
                                 <li>
-                                    <a class = "btn btn-edit-profile" href="../profile.php">Edit Profile</a>
+                                    <a class = "btn btn-edit-profile " href="../profile.php">Edit Profile</a>
                                 </li>
                             </ul>
                         </div>
@@ -329,5 +331,6 @@
         });
     });
 </script>
+</main>
 </body>
 </html>

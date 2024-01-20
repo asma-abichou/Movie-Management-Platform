@@ -1,5 +1,4 @@
 <?php
-
     include_once "DBConfig.php"; // Include your database configuration file
     $dbConnection = getDbConnection();
     if (!isset($_SESSION['user'])) {

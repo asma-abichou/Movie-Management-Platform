@@ -58,7 +58,7 @@ class MoviesController
         // Count the total number of rows
         $rows_found = count($this->crud->read($query));
         // Initialize Paginator
-        $paginator = new Paginator($rows_found, 4);
+        $paginator = new Paginator($rows_found, 5);
         // Fetch paginated results
         $results = $this->crud->read($query);
         // Get pagination links

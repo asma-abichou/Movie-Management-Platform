@@ -2,7 +2,7 @@
     include_once "DBConfig.php";
     $dbConnection = getDbConnection();
 
-    if (!isset($_SESSION['current_password_verified']) || $_SESSION['current_password_verified'] !== true) {
+    if (isset($_SESSION['user']) || $_SESSION['current_password_verified'] !== true) {
         header('location: currentPassword.php');
         die();
     }
