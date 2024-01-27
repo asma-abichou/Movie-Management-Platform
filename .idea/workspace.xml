@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fd31ea2a-a47a-4dd6-abeb-7941556bcf85" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MoviesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/MoviesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/list-movies.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/list-movies.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/changePassword.php" beforeDir="false" afterPath="$PROJECT_DIR$/changePassword.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/currentPassword.php" beforeDir="false" afterPath="$PROJECT_DIR$/currentPassword.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/admin.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/admin.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/profile.php" beforeDir="false" afterPath="$PROJECT_DIR$/profile.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +22,9 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/DBConfig.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MoviesController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
   <component name="ProjectColorInfo">{
@@ -74,11 +72,23 @@
       <workItem from="1704576562468" duration="41811000" />
       <workItem from="1704828170879" duration="15068000" />
       <workItem from="1705439773275" duration="791000" />
-      <workItem from="1705758999663" duration="4195000" />
+      <workItem from="1705758999663" duration="4670000" />
+      <workItem from="1706287468658" duration="22282000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

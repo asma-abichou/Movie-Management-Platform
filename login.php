@@ -127,6 +127,9 @@ if (isset($_POST['email'])) {
         <p>
             Not yet a member? <a href="register.php">Sign up</a>
         </p>
+        <p>
+            <a href="forgetPassword.php">Forgot your password?</a>
+        </p>
     </form>
 </main>
 </body>
