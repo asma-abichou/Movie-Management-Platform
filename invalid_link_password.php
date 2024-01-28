@@ -62,7 +62,7 @@
     <h2>Password Reset Error</h2>
     <p>The password reset link is invalid or has expired.</p>
     <p>Please make sure you are using the correct link, or you can request a new password reset link.</p>
-    <a href="forgot-password.php">Request a New Password Reset Link</a>
+    <a href="forgetPassword.php">Request a New Password Reset Link</a>
     <button class="retry-button" onclick="history.back()">Retry</button>
 </div>
 </body>

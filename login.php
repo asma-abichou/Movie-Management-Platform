@@ -102,6 +102,14 @@ if (isset($_POST['email'])) {
         unset($_SESSION["login_fail_message"]);
     }
     ?>
+    <?php
+    if (isset($_SESSION['password_reset_success'])) {
+        echo "<div id='success-message'>Password updated successfully! You can now log in.</div>";
+
+        // Clear the session variable after displaying the message
+        unset($_SESSION['password_reset_success']);
+    }
+    ?>
     <div class="header">
         <h2>Login</h2>
     </div>

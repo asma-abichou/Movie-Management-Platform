@@ -66,8 +66,9 @@
 
 <div class="container-fluid">
     <div class="row">
-     <div class ="col-sm-12" style="padding-left:0px;padding-right:0px;">
-    <div id="main-container">
+        <div class="col-sm-12" style="padding-left:0px; padding-right:0px;">
+
+        <div id="main-container">
             <aside id="left-sidebar">
                 <div id="nav-brand-container">
                     <div class = "sidebar-row">
