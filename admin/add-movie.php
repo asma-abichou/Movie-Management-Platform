@@ -75,10 +75,10 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
                             <div class = "sidebar-row">
                                 <img src="../images/admin.jpg" height="60px" width="60px">
                                 <ul id="button-container">
-                                    <li><strong><i>Welcome!</i> John Doe</strong><span class="active"></span></li>
+                                    <li><strong><i>Welcome!</i> <?php echo $_SESSION["user"]["full_name"]?></strong><span class="active"></span></li>
                                     <li style="color:#4f5967; font-size:10px;font-weight: 800">ADMINISTRATOR</li>
                                     <li>
-                                        <button class = "btn btn-edit-profile">Edit Profile</button>
+                                        <a class = "btn btn-edit-profile" href="../profile.php">Edit Profile</a>
                                     </li>
                                 </ul>
                             </div>
@@ -180,7 +180,7 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
                             </li>
                             <li>
                                 <a class="nav-link">
-                                    John Doe
+                                    <?php echo $_SESSION["user"]["full_name"]?>
                                     <i class="fas fa-chevron-down"></i>
                                 </a>
                             </li>
@@ -192,8 +192,7 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
                 <h4>Add Movie</h4>
             </div>
             <div id="add-movie-form-container">
-                <form class="form-horizontal" method="post" id="add-movie-form" action='<?php $_SERVER['PHP_SELF'] ?>' autocomplete="off" enctype="multipart/form-data" />
-
+                <form class="form-horizontal" method="post" id="add-movie-form" action='<?php $_SERVER['PHP_SELF'] ?>' autocomplete="off" enctype="multipart/form-data">
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="email">Title:</label>
                         <div class="col-sm-10">
@@ -217,7 +216,6 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
                                 foreach($genres as $key => $genre){ ?>
                                     <option value="<?= $genre['gnr_id']?>"><?=$genre['gnr_name']?></option>
                              <?php }?>
-
                             </select>
                             <span class="help-block error">
                                 <?= Validator:: getErrorFields('genres') ?>
@@ -246,9 +244,9 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
                             <a href="list-movies.php" class="btn pull-right" style="margin-right: 5px;">Back</a>
                         </div>
                     </div>
-                </form>
+                 </div>
             </div>
-        </div> 
+        </form>
     </div>
     <!-- Footer -->
         <footer class="page-footer font-small blue">

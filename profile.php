@@ -120,6 +120,7 @@
                         </div>
                         <!-- Save changes button-->
                         <button class="btn btn-primary" type="submit" name="update_profile">Save changes</button>
+                        <a class="btn btn-primary" type="submit" href="admin/list-movies.php">Back</a>
                     </form>
                 </div>
             </div>
