@@ -207,16 +207,16 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
                         <label class="control-label col-sm-2" for="pwd">Genre:</label>
                         <div class="col-sm-10">
                             <select data-placeholder="Select Genre(s)..." multiple class="form-control genre"  name="genres[]" id="genre[]">
-                                <?php
-                                include_once "../Crud.php";
+                               <?php
+                             include_once "../Crud.php";
                                 //create an object of our crud class
                                 $crud = new Crud();
                                 //call the read function
                                 $genres = $crud->read('Select * from genres');
                                 //loop through the genres
                                 foreach($genres as $key => $genre){ ?>
-                                    <option value="<?=$genre['gnr_id']?>"><?=$genre['gnr_name']?></option>
-                               <?php }?>
+                                    <option value="<?= $genre['gnr_id']?>"><?=$genre['gnr_name']?></option>
+                             <?php }?>
 
                             </select>
                             <span class="help-block error">
