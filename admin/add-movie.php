@@ -197,9 +197,6 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
                         <label class="control-label col-sm-2" for="email">Title:</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="title" placeholder="" name="mv_title" value="">
-                                <span class="help-block error">
-                                    <?= Validator::getErrorFields('mv_title') ?>
-                                </span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -217,25 +214,21 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
                                     <option value="<?= $genre['gnr_id']?>"><?=$genre['gnr_name']?></option>
                              <?php }?>
                             </select>
-                            <span class="help-block error">
-                                <?= Validator:: getErrorFields('genres') ?>
-                            </span>
+
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="year">Year Released:</label>
                         <div class="col-sm-10">
                             <input id="datepicker" name="mv_year_released" data-date-format="yyyy-mm-dd" class="form-control" type="text" value="">
-                                        <span class="help-block error">
-                                            <?= Validator::getErrorFields('mv_year_released') ?>
-                                        </span>
+
                         </div>
                     </div> 
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="year">Cover Image:</label>
                         <div class="col-sm-10">
                             <input type="file" name="cover_image" class="form-control" id="customFile" value="">
-                                        <span class="help-block"></span>
+                                <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">

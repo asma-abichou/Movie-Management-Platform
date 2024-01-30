@@ -1,6 +1,7 @@
 <?php
     include_once "DBConfig.php"; // Include your database configuration file
     $dbConnection = getDbConnection();
+    //check user authorized
     if (!isset($_SESSION['user'])) {
         header('location: login.php'); // Redirect to login page if not logged in
         exit();
@@ -20,7 +21,6 @@
     }
 
     $errors = [];
-
     if (isset($_POST['update_profile'])) {
         // Receive input values from the form
         $fullName = $_POST['fullName'];

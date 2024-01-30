@@ -16,7 +16,7 @@ class MoviesController
             'mv_title' => $_POST['mv_title'],
             'mv_year_released' => $_POST['mv_year_released'],
         ];
-        var_dump($movie_data);
+        //var_dump($movie_data);
         //insert the data to movies table
        $movie_id = $this->crud->create($movie_data,'movies');
         //ged genres from the request
@@ -84,7 +84,7 @@ class MoviesController
     //upload cover img for our movie
     public function saveAndUploadCoverImage($movie_id){
         // Directory path
-        $dir = "../images/movie_covers/movie_$movie_id/"; //movie_1
+        $dir = "../images/movie_covers/movie_$movie_id"; //movie_1
         // If the directory doesn't exist, create it with the permissions 0744
         if( !file_exists($dir)){
             mkdir($dir, 0744, true);

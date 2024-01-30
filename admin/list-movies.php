@@ -85,7 +85,7 @@
                                 <li><strong><?php echo $_SESSION["user"]["full_name"]?></strong><span class="active"></span></li>
                                 <li style="color:#4f5967; font-size:10px;font-weight: 800">ADMINISTRATOR</li>
                                 <li>
-                                    <button class = "btn btn-edit-profile " href="../profile.php">Edit Profile</button>
+                                    <a class = "btn btn-edit-profile " href="../profile.php">Edit Profile</a>
                                 </li>
                             </ul>
                         </div>
