@@ -1,5 +1,6 @@
 <?php
 include "../session.php";
+//check if the user is not authorized redirect to the index page
 if(!isset($_SESSION["user"]))
 {
     header('location: ../index.php');

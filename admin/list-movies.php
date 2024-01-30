@@ -182,7 +182,6 @@
                             <a class="nav-link">
                                 <img src="../images/admin.jpg" height="25px" width="25px">
                             </a>
-
                         </li>
                         <li>
                             <a class="nav-link">
@@ -192,12 +191,9 @@
                             <a class="nav-link" href="../logout.php">
                                 Log Out
                             </a>
-
                             <a class="nav-link" href="../currentPassword.php">
                                 Change Password
                             </a>
-
-
                         </li>
                     </ul>
             </div>

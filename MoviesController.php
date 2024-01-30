@@ -16,6 +16,7 @@ class MoviesController
             'mv_title' => $_POST['mv_title'],
             'mv_year_released' => $_POST['mv_year_released'],
         ];
+        var_dump($movie_data);
         //insert the data to movies table
        $movie_id = $this->crud->create($movie_data,'movies');
         //ged genres from the request

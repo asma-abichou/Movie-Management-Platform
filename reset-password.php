@@ -1,21 +1,12 @@
 <?php
-include_once "DBConfig.php";
-$dbConnection = getDbConnection();
-var_dump('hello');
 
+
+// Check if the user is authorized
 if (!isset($_SESSION["user_is_authorized"]) || $_SESSION["user_is_authorized"] === false) {
-    header("Location: reset-password.php");
+    header("Location: forgetPassword.php");
     exit();
 }
 
-if (isset($_GET['email']) && isset($_GET['token'])) {
-    $email = $_GET['email']; // Change $_POST to $_GET
-    $token = $_GET['token']; // Change $_POST to $_GET
-    var_dump($token);
-} else {
-    header("Location: reset-password.php?error=email_or_token_not_set"); // Fix the error message
-    exit();
-}
 ?>
 <!doctype html>
 <html lang="en">
@@ -29,8 +20,7 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
     <h2>Reset New Password Here</h2>
     <form action="update-password.php" method="post">
         <div class="form-group">
-            <input type="hidden" name="email" value="<?php /*echo $email */?>">
-            <input type="hidden" name="token" value="<?php /*echo $token */?>">
+
             <label for="new-password">New Password</label>
             <input type="password" name="password" id="new-password">
         </div>

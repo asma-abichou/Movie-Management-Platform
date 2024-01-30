@@ -1,9 +1,10 @@
 <?php
+// check if form submited the password and confim password
 if(isset($_POST['submit']) && isset($_POST['password']) && isset($_POST['confirm_password'])) {
     include_once "DBConfig.php";
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirm_password'];
-    $idUser = $_POST['id'];
+    $idUser = $_SESSION["user_id"];
 
     // Validation checks for password and confirm_password
     if(empty($password) || empty($confirmPassword)) {
@@ -18,26 +19,24 @@ if(isset($_POST['submit']) && isset($_POST['password']) && isset($_POST['confirm
         header("Location: reset-password.php");
         exit();
     }
+
     try {
         $dbConnection = getDbConnection();
         // Verify the reset link
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $updateStmt = $dbConnection->prepare("UPDATE users SET password = :password, reset_link_token = NULL, expiry_date = NULL WHERE email = :email");
+        $updateStmt = $dbConnection->prepare("UPDATE users SET password = :password, reset_link_token = NULL, expiry_date = NULL WHERE id = :userId");
         $updateStmt->bindParam(':password', $hashedPassword);
-        $updateStmt->bindParam(':email', $email);
+        $updateStmt->bindParam(':userId', $idUser);
         $updateStmt->execute();
-
-
-            $_SESSION['password_reset_success'] = true;
-            header("Location: login.php");
-            exit();
-
+        $_SESSION['password_reset_success'] = true;
+        $_SESSION['id'] = $idUser;
+        header("Location: login.php");
+        exit();
 
     } catch (PDOException $e) {
         // Set an error message and redirect back to the reset password form
         $_SESSION['flash_message'] = "Error: " . $e->getMessage();
-        header("Location: reset-password.php?email={$email}&token={$token}");
+        header("Location: reset-password.php?id={$idUser}");
         exit();
     }
 }
-?>

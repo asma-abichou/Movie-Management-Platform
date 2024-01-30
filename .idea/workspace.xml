@@ -7,10 +7,8 @@
     <list default="true" id="fd31ea2a-a47a-4dd6-abeb-7941556bcf85" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/list-movies.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/list-movies.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/invalid_link_password.php" beforeDir="false" afterPath="$PROJECT_DIR$/invalid_link_password.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reset-password-controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/reset-password-controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reset-password.php" beforeDir="false" afterPath="$PROJECT_DIR$/reset-password.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sendTokenToEmail.php" beforeDir="false" afterPath="$PROJECT_DIR$/sendTokenToEmail.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/update-password.php" beforeDir="false" afterPath="$PROJECT_DIR$/update-password.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -85,7 +83,7 @@
       <workItem from="1704828170879" duration="15068000" />
       <workItem from="1705439773275" duration="791000" />
       <workItem from="1705758999663" duration="4670000" />
-      <workItem from="1706287468658" duration="48175000" />
+      <workItem from="1706287468658" duration="58118000" />
     </task>
     <servers />
   </component>
