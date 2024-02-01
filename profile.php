@@ -1,11 +1,33 @@
 <?php
-    include_once "DBConfig.php"; // Include your database configuration file
-    $dbConnection = getDbConnection();
-    //check user authorized
-    if (!isset($_SESSION['user'])) {
-        header('location: login.php'); // Redirect to login page if not logged in
+include_once "DBConfig.php"; // Include your database configuration file
+$dbConnection = getDbConnection();
+
+// Check if the user is authorized
+if (!isset($_SESSION['user'])) {
+    header('location: login.php'); // Redirect to login page if not logged in
+    exit();
+}
+
+// Handle file upload
+if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['update_profile'])) {
+    $fileName = $_FILES["uploadFile"]["name"];
+    $tempName = $_FILES["uploadFile"]["tmp_name"];
+    $folder = "./image/" . $fileName;
+
+    // Validate file type
+    $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    if (!in_array($fileType, ['jpg', 'jpeg', 'png'])) {
+        echo "<h3> Only JPG, JPEG, and PNG files are allowed!</h3>";
         exit();
     }
+
+    // Move the uploaded image into the folder: image
+    if (move_uploaded_file($tempName, $folder)) {
+        echo "<h3>  Image uploaded successfully!</h3>";
+    } else {
+        echo "<h3>  Failed to upload image!</h3>";
+    }
+}
 
     $idUser = $_SESSION['user']['id'];
 
@@ -36,7 +58,7 @@
 
     if (empty($errors)) {
         // Update user information in the database
-        $updateQuery = "UPDATE users SET full_name = :fullName, email = :email WHERE id = :id";
+        $updateQuery = "UPDATE users SET full_name = :fullName, email = :email,  profile_image = :profileImage WHERE id = :id";
         $updateStmt = $dbConnection->prepare($updateQuery);
 
         $success = $updateStmt->execute(['fullName' => $fullName, 'email' => $email, 'id' => $idUser]);
@@ -82,11 +104,14 @@
                 <div class="card-header">Profile Picture</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-                    <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+
+                    <img src="/images/<?php echo $user['profile_image']; ?>"  class="img-account-profile rounded-circle mb-2">
+                    <!--<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
                     <!-- Profile picture help block-->
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                     <!-- Profile picture upload button-->
-                    <button class="btn btn-primary" type="button">Upload new image</button>
+                    <input class="form-control" type="file" name="uploadFile" id="profileImg" accept=".jpg, .jpeg, .png">
+                  <!--  <button type="file" class="btn btn-primary" >Upload new image</button>-->
                 </div>
             </div>
         </div>
@@ -104,7 +129,7 @@
                             </ul>
                         <?php endif; ?>
                     </div>
-                    <form action="profile.php" method="post">
+                    <form action="profile.php" method="post" enctype="multipart/form-data">
                         <!-- Form Group (username)-->
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Full Name</label>

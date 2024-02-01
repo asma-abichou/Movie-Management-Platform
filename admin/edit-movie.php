@@ -217,7 +217,7 @@ $movie = $moviesController->getMovie($_GET['id']);
                                                   join genres on gnr_id = mvg_ref_genre   
                                                   where mvg_ref_movie = $movie_id");
                                 ?>
-                            <select data-placeholder="Select Genre(s)..." multiple class="form-control genre"  name="genres[]" id="genre[]">//add genres
+                            <select data-placeholder="Select Genre(s)..." multiple class="form-control genre"  name="genres[]" id="genre[]">
                                 <?php foreach($genres as $key => $genre){ ?>}
                                     <option value="<?=$genre['gnr_id']?>"><?=$genre['gnr_name']?></option>
                                <?php }?>
@@ -258,7 +258,7 @@ $movie = $moviesController->getMovie($_GET['id']);
 
             <!-- Copyright -->
             <div class="footer-copyright text-center py-3">© 2019 Copyright:
-                <a href="https://mdbootstrap.com/education/bootstrap/"> goodmovies</a>
+                <a href="https://mdbootstrap.com/education/bootstrap/"> Good Movies</a>
             </div>
             <!-- Copyright -->
 
