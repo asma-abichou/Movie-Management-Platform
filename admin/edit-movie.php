@@ -1,6 +1,8 @@
 <?php
 include "../session.php";
 include_once "../MoviesController.php";
+include "../profile.php";
+$dbConnection = getDbConnection();
 
 if(!isset($_SESSION["user"]))
 {
@@ -73,7 +75,7 @@ $movie = $moviesController->getMovie($_GET['id']);
                     </div>
                         <div id="profile-pic-container">
                             <div class = "sidebar-row">
-                                <img src="../images/admin.jpg" height="60px" width="60px">
+                                <img src="../images/<?php echo $user['profile_image']; ?>" height="60px" width="60px">
                                 <ul id="button-container">
                                     <li><strong><i>Welcome!</i> John Doe</strong><span class="active"></span></li>
                                     <li style="color:#4f5967; font-size:10px;font-weight: 800">ADMINISTRATOR</li>

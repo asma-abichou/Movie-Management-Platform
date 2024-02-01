@@ -13,6 +13,7 @@ if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['upd
     $fileName = $_FILES["uploadFile"]["name"];
     $tempName = $_FILES["uploadFile"]["tmp_name"];
     $folder = "./image/" . $fileName;
+    var_dump($folder);
 
     // Validate file type
     $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
@@ -20,14 +21,9 @@ if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['upd
         echo "<h3> Only JPG, JPEG, and PNG files are allowed!</h3>";
         exit();
     }
-
-    // Move the uploaded image into the folder: image
-    if (move_uploaded_file($tempName, $folder)) {
-        echo "<h3>  Image uploaded successfully!</h3>";
-    } else {
-        echo "<h3>  Failed to upload image!</h3>";
-    }
 }
+
+
 
     $idUser = $_SESSION['user']['id'];
 
@@ -56,29 +52,33 @@ if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['upd
             $errors[] = "Email is required!";
         }
 
-    if (empty($errors)) {
-        // Update user information in the database
-        $updateQuery = "UPDATE users SET full_name = :fullName, email = :email,  profile_image = :profileImage WHERE id = :id";
-        $updateStmt = $dbConnection->prepare($updateQuery);
+        if (empty($errors)) {
+            // Update user information in the database
+            $updateQuery = "UPDATE users SET full_name = :fullName, email = :email, profile_image = :profileImage WHERE id = :id";
+            $updateStmt = $dbConnection->prepare($updateQuery);
 
-        $success = $updateStmt->execute(['fullName' => $fullName, 'email' => $email, 'id' => $idUser]);
+            $updateStmt->bindParam(':fullName', $fullName);
+            $updateStmt->bindParam(':email', $email);
+            $updateStmt->bindParam(':profileImage', $fileName);  // Make sure $fileName is set
+            $updateStmt->bindParam(':id', $idUser);
+            $success = $updateStmt->execute();
 
-        if ($success) {
-            // Reload updated user data
-            $stmt->execute(['id' => $idUser]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            $_SESSION['user'] = $user;  // Update the session with fresh user data
+            if ($success) {
+                // Reload updated user data
+                $stmt->execute(['id' => $idUser]);
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                $_SESSION['user'] = $user;  // Update the session with fresh user data
 
-            $_SESSION['editInfo_success_message'] = "Profile updated successfully!";
-            header('location: admin/list-movies.php');
-            exit();
-        } else {
-            $_SESSION['editInfo_fail_message'] = "Error updating profile. Please try again.";
-            header('location: profile.php');
-            exit();
+                $_SESSION['editInfo_success_message'] = "Profile updated successfully!";
+                header('location: admin/list-movies.php');
+                exit();
+            } else {
+                $_SESSION['editInfo_fail_message'] = "Error updating profile. Please try again.";
+                header('location: profile.php');
+                exit();
+            }
         }
     }
-}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -105,7 +105,7 @@ if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['upd
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
 
-                    <img src="/images/<?php echo $user['profile_image']; ?>"  class="img-account-profile rounded-circle mb-2">
+                    <img src="images/<?php echo $user['profile_image']; ?>"  class="img-account-profile rounded-circle mb-2">
                     <!--<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
                     <!-- Profile picture help block-->
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>

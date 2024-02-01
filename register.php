@@ -76,6 +76,14 @@ if (isset($_POST['password'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.phptutorial.net/app/css/style.css">
     <title>Register</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        #passwordError {
+            color: red;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
 
 </head>
 <body>
@@ -105,9 +113,46 @@ if (isset($_POST['password'])) {
             <label for="password2">Confirm Password:</label>
             <input type="password" name="password2" id="password2">
         </div>
+        <p id="passwordError" ></p>
         <button name="form-is-submitted" type="submit">Register</button>
         <footer>Already a member? <a href="login.php">Login here</a></footer>
     </form>
+
 </main>
+<script>
+    $(document).ready(function() {
+        // Function to validate password
+        function validatePassword() {
+            let password = $("#password").val();
+            let confirmPassword = $("#password2").val();
+            let passwordError = $("#passwordError");
+
+            // Regular expressions for validation
+            let uppercaseRegex = /[A-Z]/;
+            let lowercaseRegex = /[a-z]/;
+            let specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+
+            // Check if the password meets the criteria
+            let isUppercase = uppercaseRegex.test(password);
+            let isLowercase = lowercaseRegex.test(password);
+            let isSpecialChar = specialCharRegex.test(password);
+            let isLengthValid = password.length >= 8;
+
+            // Display error message if criteria are not met
+            if (!(isUppercase && isLowercase && isSpecialChar && isLengthValid)) {
+                passwordError.text("Password must have at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.");
+            } else {
+                passwordError.text("");
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                passwordError.text("Passwords do not match.");
+            }
+        }
+        // Call the validatePassword function on input change
+        $("#password, #password2").on("input", validatePassword);
+    });
+</script>
 </body>
 </html>
