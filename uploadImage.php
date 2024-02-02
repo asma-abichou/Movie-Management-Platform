@@ -3,9 +3,10 @@ include_once "DBConfig.php"; // Include your database configuration file
 $dbConnection = getDbConnection();
 
 $msg = ""; // Initialize a variable to store messages
-
+// set the upload location
+$uploadDir = "profileImage/";
 try {
-    if (!empty($_FILES['uploadFile']['name']) && isset($_POST['update_profile'])) {
+    if (!empty($_FILES['uploadFile']['name']) && isset($_POST['savePicture'])) {
         $fileName = $_FILES["uploadFile"]["name"];
         $tempName = $_FILES["uploadFile"]["tmp_name"];
         $folder = "profileImage/" . $fileName;
@@ -66,4 +67,3 @@ try {
     // Handle any exceptions thrown during file upload or database operations
     echo "<h3>Error: " . $e->getMessage() . "</h3>";
 }
-?>

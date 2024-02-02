@@ -3,72 +3,13 @@ include_once "DBConfig.php"; // Include your database configuration file
 $dbConnection = getDbConnection();
 
 // Check if the user is authorized
-if (!isset($_SESSION['user'])) {
-    header('location: login.php'); // Redirect to login page if not logged in
-    exit();
-}
-/*var_dump($_SESSION['user']);
-die();*/
-$msg = "";
-
-// Fetch user data from the database
-$idUser = $_SESSION['user']['id'];
-$query = "SELECT * FROM users WHERE id = :id";
-$stmt = $dbConnection->prepare($query);
-$stmt->execute(['id' => $idUser]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-/*var_dump($user);
-die();*/
-if (!$user) {
-    echo "User not found!";
-    exit();
-}
-
-
-// Handle file upload
-if (isset($_POST['update_profile'])) {
-    /*var_dump($_GET['update_profile']);
+    if (!isset($_SESSION['user'])) {
+        header('location: login.php'); // Redirect to login page if not logged in
+        exit();
+    }
+    /*var_dump($_SESSION['user']);
     die();*/
-    $fullName = $_POST['fullName'];
-    $email = $_POST['email'];
-    /*var_dump($fullName);
-    die();*/
-    // Validation
-    if (empty($fullName) || empty($email)) {
-        echo "<h3>Full name and email are required!</h3>";
-        exit();
-    }
-    if (!file_exists("profileImage")) {
-        mkdir("profileImage");
-    }
 
-    // Update user information in the database
-    $updateQuery = "UPDATE users SET full_name = :fullName, email = :email, profile_image = :profileImage WHERE id = :id";
-    $updateStmt = $dbConnection->prepare($updateQuery);
-
-
-    $updateStmt->bindParam(':fullName', $fullName);
-    $updateStmt->bindParam(':email', $email);
-    $updateStmt->bindParam(':profileImage', $fileName);  // Make sure $fileName is set
-    $updateStmt->bindParam(':id', $idUser);
-
-    $success = $updateStmt->execute();
-
-    if ($success) {
-        // Reload updated user data
-        $stmt->execute(['id' => $idUser]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        $_SESSION['user'] = $user;  // Update the session with fresh user data
-        $_SESSION['user']['profile_image'] = $fileName; // Update the session with fresh user data
-        $_SESSION['editInfo_success_message'] = "Profile updated successfully!";
-        header('location: admin/list-movies.php');
-        exit();
-    } else {
-        $_SESSION['editInfo_fail_message'] = "Error updating profile. Please try again.";
-        header('location: profile.php');
-        exit();
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -93,19 +34,23 @@ if (isset($_POST['update_profile'])) {
         <div class="col-xl-4">
             <!-- Profile picture card-->
             <form action="uploadImage.php" method="post" enctype="multipart/form-data">
-            <div class="card mb-4 mb-xl-0">
-                <div class="card-header">Profile Picture</div>
-                <div class="card-body text-center">
-                    <!-- Profile picture image-->
-                    <img src=" profileImage/<?php echo  $_SESSION['user']['profile_image']; ?>" class="img-account-profile rounded-circle mb-2">                    <!--<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
-                    <!-- Profile picture help block-->
-                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                    <!-- Profile picture upload button-->
-                    <input class="form-control" type="file" name="uploadFile" id="profileImg" accept=".jpg, .jpeg, .png">
-                  <!--  <button type="file" class="btn btn-primary" >Upload new image</button>-->
+                <div class="card mb-4 mb-xl-0">
+                    <div class="card-header">Profile Picture</div>
+                    <div class="card-body text-center">
+                        <!-- Profile picture image-->
+                        <img src=" profileImage/<?= $_SESSION['user']['profile_image']; ?>" class="img-account-profile rounded-circle mb-2">                    <!--<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
+                        <!-- Profile picture help block-->
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                        <!-- Profile picture upload button-->
+                        <input class="form-control" type="file" name="uploadFile" id="profileImg" accept=".jpg, .jpeg, .png" onchange="document.getElementById('savePicture').click();">
+                      <!--  <button typ="file" class="btn btn-primary" >Upload new image</button>-->
+                        <button type="submit" name="savePicture" id="savePicture" class="btn btn-primary mt-4" >Save Profile Picture</button>
+
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
+
         <div class="col-xl-8">
             <!-- Account details card-->
             <div class="card mb-4">
@@ -120,7 +65,7 @@ if (isset($_POST['update_profile'])) {
                             </ul>
                         <?php endif; ?>
                     </div>
-                    <form action="profile.php" method="post" enctype="multipart/form-data">
+                    <form action="editProfile.php" method="post" enctype="multipart/form-data">
                         <!-- Form Group (username)-->
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Full Name</label>
@@ -134,10 +79,10 @@ if (isset($_POST['update_profile'])) {
                         <div>
                             <label class="small mb-1">Gender</label>
                                 <div >
-                                    <input type="radio" id="male" name="gender" value="Male" <?php if ($_SESSION["user"]["gender"] == "Male") echo "checked"; ?>>
+                                    <input type="radio" id="male" name="gender" value="Male" >
                                     <label for="male">Male</label>
 
-                                    <input type="radio" id="female" name="gender" value="Female" <?php if ($_SESSION["user"]["gender"] == "Female") echo "checked"; ?>>
+                                    <input type="radio" id="female" name="gender" value="Female">
                                     <label for="female">Female</label>
                                 </div>
 
