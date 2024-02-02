@@ -12,8 +12,9 @@ if(!isset($_SESSION["user"]))
 
 $moviesController = new MoviesController();
 $movie = $moviesController->getMovie($_GET['id']);
+$_SESSION['user'] = $user;
 
-    if(($_SERVER['REQUEST_METHOD'] == 'POST')){
+if(($_SERVER['REQUEST_METHOD'] == 'POST')){
 
         $moviesController->editMovie($_GET['id']);
     }
@@ -176,7 +177,7 @@ $movie = $moviesController->getMovie($_GET['id']);
                             </li>
                             <li>
                                 <a class="nav-link">
-                                    <img src="../images/admin.jpg" height="25px" width="25px">
+                                    <img src="../images/<?php echo  $_SESSION['user']['profile_image']; ?>" height="25px" width="25px">
                                 </a>
 
                             </li>

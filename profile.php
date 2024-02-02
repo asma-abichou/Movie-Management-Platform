@@ -7,78 +7,68 @@ if (!isset($_SESSION['user'])) {
     header('location: login.php'); // Redirect to login page if not logged in
     exit();
 }
+/*var_dump($_SESSION['user']);
+die();*/
+$msg = "";
 
-// Handle file upload
-if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['update_profile'])) {
-    $fileName = $_FILES["uploadFile"]["name"];
-    $tempName = $_FILES["uploadFile"]["tmp_name"];
-    $folder = "./image/" . $fileName;
-    var_dump($folder);
-
-    // Validate file type
-    $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-    if (!in_array($fileType, ['jpg', 'jpeg', 'png'])) {
-        echo "<h3> Only JPG, JPEG, and PNG files are allowed!</h3>";
-        exit();
-    }
+// Fetch user data from the database
+$idUser = $_SESSION['user']['id'];
+$query = "SELECT * FROM users WHERE id = :id";
+$stmt = $dbConnection->prepare($query);
+$stmt->execute(['id' => $idUser]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+/*var_dump($user);
+die();*/
+if (!$user) {
+    echo "User not found!";
+    exit();
 }
 
 
-
-    $idUser = $_SESSION['user']['id'];
-
-    // Fetch user data from the database
-    $query = "SELECT * FROM users WHERE id = :id";
-    $stmt = $dbConnection->prepare($query);
-    $stmt->execute(['id' => $idUser]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$user) {
-        echo "User not found!";
+// Handle file upload
+if (isset($_POST['update_profile'])) {
+    /*var_dump($_GET['update_profile']);
+    die();*/
+    $fullName = $_POST['fullName'];
+    $email = $_POST['email'];
+    /*var_dump($fullName);
+    die();*/
+    // Validation
+    if (empty($fullName) || empty($email)) {
+        echo "<h3>Full name and email are required!</h3>";
         exit();
     }
-
-    $errors = [];
-    if (isset($_POST['update_profile'])) {
-        // Receive input values from the form
-        $fullName = $_POST['fullName'];
-        $email = $_POST['email'];
-
-        // Validation
-        if (empty($fullName)) {
-            $errors[] = "Full name is required!";
-        }
-        if (empty($email)) {
-            $errors[] = "Email is required!";
-        }
-
-        if (empty($errors)) {
-            // Update user information in the database
-            $updateQuery = "UPDATE users SET full_name = :fullName, email = :email, profile_image = :profileImage WHERE id = :id";
-            $updateStmt = $dbConnection->prepare($updateQuery);
-
-            $updateStmt->bindParam(':fullName', $fullName);
-            $updateStmt->bindParam(':email', $email);
-            $updateStmt->bindParam(':profileImage', $fileName);  // Make sure $fileName is set
-            $updateStmt->bindParam(':id', $idUser);
-            $success = $updateStmt->execute();
-
-            if ($success) {
-                // Reload updated user data
-                $stmt->execute(['id' => $idUser]);
-                $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                $_SESSION['user'] = $user;  // Update the session with fresh user data
-
-                $_SESSION['editInfo_success_message'] = "Profile updated successfully!";
-                header('location: admin/list-movies.php');
-                exit();
-            } else {
-                $_SESSION['editInfo_fail_message'] = "Error updating profile. Please try again.";
-                header('location: profile.php');
-                exit();
-            }
-        }
+    if (!file_exists("profileImage")) {
+        mkdir("profileImage");
     }
+
+    // Update user information in the database
+    $updateQuery = "UPDATE users SET full_name = :fullName, email = :email, profile_image = :profileImage WHERE id = :id";
+    $updateStmt = $dbConnection->prepare($updateQuery);
+
+
+    $updateStmt->bindParam(':fullName', $fullName);
+    $updateStmt->bindParam(':email', $email);
+    $updateStmt->bindParam(':profileImage', $fileName);  // Make sure $fileName is set
+    $updateStmt->bindParam(':id', $idUser);
+
+    $success = $updateStmt->execute();
+
+    if ($success) {
+        // Reload updated user data
+        $stmt->execute(['id' => $idUser]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $_SESSION['user'] = $user;  // Update the session with fresh user data
+        $_SESSION['user']['profile_image'] = $fileName; // Update the session with fresh user data
+        $_SESSION['editInfo_success_message'] = "Profile updated successfully!";
+        header('location: admin/list-movies.php');
+        exit();
+    } else {
+        $_SESSION['editInfo_fail_message'] = "Error updating profile. Please try again.";
+        header('location: profile.php');
+        exit();
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -90,6 +80,8 @@ if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['upd
     <script src="script.js"></script>
 </head>
 <body>
+
+
 <main>
     <div class="container-xl px-4 mt-4">
     <!-- Account page navigation-->
@@ -100,13 +92,12 @@ if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['upd
     <div class="row">
         <div class="col-xl-4">
             <!-- Profile picture card-->
+            <form action="uploadImage.php" method="post" enctype="multipart/form-data">
             <div class="card mb-4 mb-xl-0">
                 <div class="card-header">Profile Picture</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-
-                    <img src="images/<?php echo $user['profile_image']; ?>"  class="img-account-profile rounded-circle mb-2">
-                    <!--<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
+                    <img src=" profileImage/<?php echo  $_SESSION['user']['profile_image']; ?>" class="img-account-profile rounded-circle mb-2">                    <!--<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
                     <!-- Profile picture help block-->
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                     <!-- Profile picture upload button-->
@@ -141,11 +132,20 @@ if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['upd
                             <input class="form-control" id="inputEmailAddress" type="email" name="email" placeholder="Enter your email address" value="<?php echo $_SESSION["user"]["email"]?>">
                         </div>
                         <div>
+                            <label class="small mb-1">Gender</label>
+                                <div >
+                                    <input type="radio" id="male" name="gender" value="Male" <?php if ($_SESSION["user"]["gender"] == "Male") echo "checked"; ?>>
+                                    <label for="male">Male</label>
+
+                                    <input type="radio" id="female" name="gender" value="Female" <?php if ($_SESSION["user"]["gender"] == "Female") echo "checked"; ?>>
+                                    <label for="female">Female</label>
+                                </div>
+
                             <input type="text" name="idUser" value="<?php echo $_SESSION["user"]["id"]?>" hidden="">
                         </div>
                         <!-- Save changes button-->
-                        <button class="btn btn-primary" type="submit" name="update_profile">Save changes</button>
-                        <a class="btn btn-primary" type="submit" href="admin/list-movies.php">Back</a>
+                        <button class="btn btn-primary mt-4" type="submit" name="update_profile">Save changes</button>
+                        <a class="btn btn-primary mt-4" type="submit" href="admin/list-movies.php">Back</a>
                     </form>
                 </div>
             </div>
@@ -154,6 +154,7 @@ if (isset($_POST['upload']) && isset($_FILES['uploadFile']) && isset($_POST['upd
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </main>
+
 </body>
 </html>
 

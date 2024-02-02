@@ -174,7 +174,7 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
                             </li>
                             <li>
                                 <a class="nav-link">
-                                    <img src="../images/admin.jpg" height="25px" width="25px">
+                                    <img src="../images/<?php echo $_SESSION['user']['profile_image'] ; ?>" height="25px" width="25px">
                                 </a>
 
                             </li>
@@ -246,7 +246,7 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')){
 
             <!-- Copyright -->
             <div class="footer-copyright text-center py-3">© 2019 Copyright:
-                <a href="https://mdbootstrap.com/education/bootstrap/"> goodmovies</a>
+                <a href="https://mdbootstrap.com/education/bootstrap/"> good movies</a>
             </div>
             <!-- Copyright -->
 

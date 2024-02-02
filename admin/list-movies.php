@@ -80,7 +80,7 @@
                 </div>
                     <div id="profile-pic-container">
                         <div class = "sidebar-row">
-                            <img src="../images/admin.jpg" height="60px" width="60px">
+                            <img src="../profileImage/<?php echo  $_SESSION['user']['profile_image']; ?>" height="60px" width="60px">
                             <ul id="button-container">
                                 <li><strong><?php echo $_SESSION["user"]["full_name"]?></strong><span class="active"></span></li>
                                 <li style="color:#4f5967; font-size:10px;font-weight: 800">ADMINISTRATOR</li>
@@ -181,7 +181,7 @@
                         </li>
                         <li>
                             <a class="nav-link">
-                                <img src="../images/admin.jpg" height="25px" width="25px">
+                                <img src="../profileImage/<?php echo  $_SESSION['user']['profile_image']; ?> " height="25px" width="25px">
                             </a>
                         </li>
                         <li>

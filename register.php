@@ -128,14 +128,14 @@ if (isset($_POST['password'])) {
             let passwordError = $("#passwordError");
 
             // Regular expressions for validation
-            let uppercaseRegex = /[A-Z]/;
-            let lowercaseRegex = /[a-z]/;
-            let specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+            let uppercase = /[A-Z]/;
+            let lowercase = /[a-z]/;
+            let specialChar= /[!@#$%^&*(),.?":{}|<>]/;
 
             // Check if the password meets the criteria
-            let isUppercase = uppercaseRegex.test(password);
-            let isLowercase = lowercaseRegex.test(password);
-            let isSpecialChar = specialCharRegex.test(password);
+            let isUppercase = uppercase.test(password);
+            let isLowercase = lowercase.test(password);
+            let isSpecialChar = specialChar.test(password);
             let isLengthValid = password.length >= 8;
 
             // Display error message if criteria are not met
@@ -144,7 +144,6 @@ if (isset($_POST['password'])) {
             } else {
                 passwordError.text("");
             }
-
             // Check if passwords match
             if (password !== confirmPassword) {
                 passwordError.text("Passwords do not match.");
