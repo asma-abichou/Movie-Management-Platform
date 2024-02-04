@@ -27,7 +27,6 @@ try {
                 // Update user profile image in the database
                 $updateQuery = "UPDATE users SET profile_image = :profileImage WHERE id = :id";
                 $updateStmt = $dbConnection->prepare($updateQuery);
-
                 $updateStmt->bindParam(':profileImage', $fileName);
                 $updateStmt->bindParam(':id', $idUser);
 
@@ -44,7 +43,7 @@ try {
                     $user['picture'] = $fileName;
                    // var_dump($fileName);
                     $_SESSION['editInfo_success_message'] = "Profile picture updated successfully!";
-                    header('location: admin/list-movies.php');
+                    header('location: profile.php');
                     exit();
                 } else {
                     throw new Exception("Error updating profile picture. Please try again.");

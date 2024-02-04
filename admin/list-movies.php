@@ -70,95 +70,9 @@
         <div class="col-sm-12" style="padding-left:0px; padding-right:0px;">
 
         <div id="main-container">
-            <aside id="left-sidebar">
-                <div id="nav-brand-container">
-                    <div class = "sidebar-row">
-                        <a id="nav-brand"> GoodMovies
-                        </a>
-                        <i id="bars" class="fas fa-bars"></i>
-                    </div>
-                </div>
-                    <div id="profile-pic-container">
-                        <div class = "sidebar-row">
-                            <img src="../profileImage/<?php echo  $_SESSION['user']['profile_image']; ?>" height="60px" width="60px">
-                            <ul id="button-container">
-                                <li><strong><?php echo $_SESSION["user"]["full_name"]?></strong><span class="active"></span></li>
-                                <li style="color:#4f5967; font-size:10px;font-weight: 800">ADMINISTRATOR</li>
-                                <li>
-                                    <a class = "btn btn-edit-profile " href="../profile.php">Edit Profile</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                <div class = "sidebar-row">
-                    <div id="sidebar-items">
-                        <ul>
-                            <li>
-                                <a href="admin.php">
-                                    <i class="fas fa-tachometer-alt"></i>
-                                    <span>Dashboard</span>
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a  href="admin.php">
-                                    <i class="fas fa-file-video"></i>
-                                    <span>Movies</span>
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-
-                            </li>
-                            <li>
-                                <a>
-                                    <i class="fas fa-tv"></i>
-                                    <span>Genres</span>
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a>
-                                    <i class="far fa-images"></i>
-                                    <span>Movie Icons</span>
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                            <span style="color:#2d3e50">EXTRAS</span>
-                                <li>
-                                    <a>
-                                        <i class="fas fa-tachometer-alt"></i>
-                                        <span>Dashboard</span>
-                                        <i class="fas fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <i class="fas fa-users"></i>
-                                        <span>Users</span>
-                                    </a>
-                                </li>
-                            <li>
-                                <a>
-                                    <i class="fas fa-users-cog"></i>
-                                    <span>User Config</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a>
-                                    <i class="fas fa-money-check-alt"></i>
-                                    <span>Payment Methods</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a>
-                                    <i class="fas fa-tachometer-alt"></i>
-                                    <span>Invoices</span>
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </aside>
+            <?php
+            include_once "../body/left_side_bar.php";
+            ?>
         <div id="main-panel">
             <div id="notifications-container">
                     <h3>Movies</h3>

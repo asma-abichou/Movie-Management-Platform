@@ -105,23 +105,24 @@ if (isset($_POST['password'])) {
         </div>
         <div>
             <label for="password2">Confirm Password:</label>
-            <input type="password" name="password2" id="password2"  onkeypress="validatePassword()">
+            <input type="password" name="password2" id="password2">
         </div>
 
         <p id="passwordError" ></p>
-        <button name="form-is-submitted" type="submit">Register</button>
+        <button name="form-is-submitted" type="submit" id="registerButton" disabled>Register</button>
         <footer>Already a member? <a href="login.php">Login here</a></footer>
     </form>
 
 </main>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function() {
-
         // Function to validate password
         function validatePassword() {
             let password = $("#password").val();
             let confirmPassword = $("#password2").val();
             let passwordError = $("#passwordError");
+            let registerButton = $("#registerButton");
 
             // Regular expressions for validation
             let uppercase = /[A-Z]/;
@@ -137,19 +138,22 @@ if (isset($_POST['password'])) {
             // Display error message if criteria are not met
             if (!(isUppercase && isLowercase && isSpecialChar && isLengthValid)) {
                 passwordError.text("Password must have at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.");
+                registerButton.prop('disabled', true);
             } else {
                 passwordError.text("");
+                registerButton.removeAttr('disabled');
             }
             // Check if passwords match
             if (password !== confirmPassword) {
                 passwordError.text("Passwords do not match.");
+                registerButton.prop('disabled', false);
             }
         }
         // Call the validatePassword function on input change
         /*$("#password, #password2").on("input", validatePassword);*/
-        $(document).ready(function() {
-            $("#password").on('keyup', validatePassword)
-        });
+        // Call the validatePassword function on input change
+        // Call the validatePassword function on input change
+        $("#password, #password2").on('input', validatePassword);
     });
 </script>
 </body>
