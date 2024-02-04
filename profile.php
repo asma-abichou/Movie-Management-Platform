@@ -7,9 +7,10 @@ $dbConnection = getDbConnection();
         header('location: login.php'); // Redirect to login page if not logged in
         exit();
     }
-    /*var_dump($_SESSION['user']);
-    die();*/
-
+if (isset($_POST['logout'])) {
+// Unset profile image information
+    unset($_SESSION['user']['profile_image']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -33,19 +34,19 @@ $dbConnection = getDbConnection();
     <div class="row">
         <div class="col-xl-4">
             <!-- Profile picture card-->
-            <form action="uploadImage.php" method="post" enctype="multipart/form-data">
+            <form action="uploadImage.php" method="post" enctype="multipart/form-data"  id="profileForm">
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
-                        <img src=" profileImage/<?= $_SESSION['user']['profile_image']; ?>" class="img-account-profile rounded-circle mb-2">                    <!--<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
+                        <img src="profileImage/<?= $_SESSION['user']['profile_image'] ?>" class="img-account-profile rounded-circle mb-2">
+                        <!--<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
                         <!-- Profile picture help block-->
                         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                         <!-- Profile picture upload button-->
-                        <input class="form-control" type="file" name="uploadFile" id="profileImg" accept=".jpg, .jpeg, .png" onchange="document.getElementById('savePicture').click();">
+                        <input class="form-control" type="file" name="uploadFile" id="profileImg" accept=".jpg, .jpeg, .png" onchange="document.getElementById('savePicture').click()">
                       <!--  <button typ="file" class="btn btn-primary" >Upload new image</button>-->
-                        <button type="submit" name="savePicture" id="savePicture" class="btn btn-primary mt-4" >Save Profile Picture</button>
-
+                        <input  type="submit" name="savePicture" id="savePicture" class="btn btn-primary mt-4" hidden=""></input>
                     </div>
                 </div>
             </form>
@@ -89,7 +90,7 @@ $dbConnection = getDbConnection();
                             <input type="text" name="idUser" value="<?php echo $_SESSION["user"]["id"]?>" hidden="">
                         </div>
                         <!-- Save changes button-->
-                        <button class="btn btn-primary mt-4" type="submit" name="update_profile">Save changes</button>
+                        <button class="btn btn-primary mt-4" type="submit" name="update_profile" id="update_profile">Save changes</button>
                         <a class="btn btn-primary mt-4" type="submit" href="admin/list-movies.php">Back</a>
                     </form>
                 </div>

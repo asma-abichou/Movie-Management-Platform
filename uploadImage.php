@@ -2,8 +2,7 @@
 include_once "DBConfig.php"; // Include your database configuration file
 $dbConnection = getDbConnection();
 
-$msg = ""; // Initialize a variable to store messages
-// set the upload location
+$msg = "";
 $uploadDir = "profileImage/";
 try {
     if (!empty($_FILES['uploadFile']['name']) && isset($_POST['savePicture'])) {
@@ -41,11 +40,9 @@ try {
                     $stmt->execute(['id' => $idUser]);
                     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                    if (!$user) {
-                        throw new Exception("User not found!");
-                    }
-
-                    $_SESSION['user']['profile_image'] = $fileName; // Update the session with fresh user data
+                    $_SESSION['user']['profile_image'] = $fileName;
+                    $user['picture'] = $fileName;
+                   // var_dump($fileName);
                     $_SESSION['editInfo_success_message'] = "Profile picture updated successfully!";
                     header('location: admin/list-movies.php');
                     exit();
@@ -59,11 +56,9 @@ try {
     } else {
         $msg = "No file uploaded or invalid file name.";
     }
-
-    // Output the message to the user (you can use this message in your HTML)
     echo "<h3>$msg</h3>";
 
 } catch (Exception $e) {
-    // Handle any exceptions thrown during file upload or database operations
+
     echo "<h3>Error: " . $e->getMessage() . "</h3>";
 }

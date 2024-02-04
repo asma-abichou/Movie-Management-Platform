@@ -5,7 +5,6 @@ if(isset($_SESSION["user"]))
     header('location: admin/list-movies.php');
     die();
 }
-
 // Check if the registration form is submitted
 if (isset($_POST['password'])) {
     include_once "DBConfig.php";
@@ -16,10 +15,8 @@ if (isset($_POST['password'])) {
     $password = $_POST['password'];
     $confirmPassword = $_POST['password2'];
 
-
     $errors = [];
-    // form validation: ensure that the form is correctly filled ...
-    // by adding (array_push()) corresponding error unto $errors array
+
     if (empty($fullName)) {
         $_SESSION["registration_fail_message"] = "Full name is required!";
         header('location: register.php');
@@ -50,21 +47,18 @@ if (isset($_POST['password'])) {
     if ($user) { // if user exists
         array_push($errors, "Email already exists!");
     }
-
+    $role = 'user';
     // Register the user if there are no errors
     if (count($errors) == 0) {
         // Encrypt the password before saving in the database
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // encrypt the password before saving in the database
         // Insert user data into the database
-        $registerUserQuery = "INSERT INTO users (full_name, email, password) VALUES (:fullName, :email, :password)";
+        $registerUserQuery = "INSERT INTO users (full_name, email, password, role) VALUES (:fullName, :email, :password, :role)";
         $stmt = $dbConnection->prepare($registerUserQuery);
-        $stmt->execute(['fullName' => $fullName, 'email' => $email, 'password' => $hashedPassword]);
-        // Get the ID of the newly registered user
+        $stmt->execute(['fullName' => $fullName, 'email' => $email, 'password' => $hashedPassword, 'role' => 'ROLE_USER']);
         $registeredUserId = $dbConnection->lastInsertId();
         $_SESSION["registration_success_message"] = "Registration successful! You can now log in.";
-
-        // Redirect to the login page
-        header('location: login.php'); // Change this to the appropriate redirect page
+        header('location: login.php');
         exit();
     }
 }
@@ -111,8 +105,9 @@ if (isset($_POST['password'])) {
         </div>
         <div>
             <label for="password2">Confirm Password:</label>
-            <input type="password" name="password2" id="password2">
+            <input type="password" name="password2" id="password2"  onkeypress="validatePassword()">
         </div>
+
         <p id="passwordError" ></p>
         <button name="form-is-submitted" type="submit">Register</button>
         <footer>Already a member? <a href="login.php">Login here</a></footer>
@@ -121,6 +116,7 @@ if (isset($_POST['password'])) {
 </main>
 <script>
     $(document).ready(function() {
+
         // Function to validate password
         function validatePassword() {
             let password = $("#password").val();
@@ -150,7 +146,10 @@ if (isset($_POST['password'])) {
             }
         }
         // Call the validatePassword function on input change
-        $("#password, #password2").on("input", validatePassword);
+        /*$("#password, #password2").on("input", validatePassword);*/
+        $(document).ready(function() {
+            $("#password").on('keyup', validatePassword)
+        });
     });
 </script>
 </body>

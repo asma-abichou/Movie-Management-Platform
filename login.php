@@ -1,46 +1,51 @@
 <?php
-// Check if the user is already logged in, redirect to the admin page
-if(isset($_SESSION["user"]))
-{
+if(isset($_SESSION["user"])) {
     header('location: admin/list-movies.php');
     die();
 }
-
-// Now we check if the data from the login form was submitted, isset() will check if the data exists.
 if (isset($_POST['email'])) {
-    // Assuming 'login_user' is the name of the submit button
-    include_once "DBConfig.php";
-    $dbConnection = getDbConnection();
-    // Retrieve email and password from the POST data
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    // Check if email and password are provided
-    if (empty($email) || empty($password)) {
-        $_SESSION["login_fail_message"] = "Email and password are required!";
-        header('location: login.php');
-        die();
-    } else {
-        // Query the database to fetch user data based on the provided email
-        $query = $dbConnection->prepare('SELECT id, email, full_name, password FROM users WHERE email = :email');
-        $query->execute(['email' => $email]);
-        $user = $query->fetch(PDO::FETCH_ASSOC);
-        // Check if the user exists and the provided password is correct
-        if ($user && password_verify($password, $user['password'])) {
-            // Set user session and redirect to the admin page
-            $_SESSION["user"] = $user;
-            header("location: admin/list-movies.php");
-            die();
-        } else {
-            // Display an error message for wrong email or password
-            $_SESSION["login_fail_message"] = "Wrong email or password!";
+        include_once "DBConfig.php";
+        $dbConnection = getDbConnection();
+        // Retrieve email and password from the POST data
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        //$role = $_POST["role"];
+        // Check if email and password are provided
+        if (empty($email) || empty($password)) {
+            $_SESSION["login_fail_message"] = "Email and password are required!";
             header('location: login.php');
             die();
+        } else {
+            // Query the database to fetch user data based on the provided email
+            $query = $dbConnection->prepare('SELECT * FROM users WHERE email = :email AND (role = :admin_role OR role = :user_role)');
+            $query->execute(['email' => $email, 'admin_role' => 'ROLE_ADMIN', 'user_role' => 'ROLE_USER']);
+            $user = $query->fetch(PDO::FETCH_ASSOC);
+            if ($user && password_verify($password, $user['password'])) {
+
+                // Set user session
+                //  $_SESSION["user"] = $user;
+                //   $_SESSION["user"]["role"] = 'user';
+                // Check user role
+                if ($user['role'] === 'ROLE_ADMIN') {
+                    $_SESSION["user"] = $user;
+                    // Redirect to the admin page
+                    header("location: admin/list-movies.php");
+                    die();
+                } else if($user['role'] === 'ROLE_USER'){
+                    $_SESSION["error"] = "Access Denied!";
+                    header('location: login.php');
+                    die();
+                }
+            } else{
+                    $_SESSION["login_fail_message"] = "Wrong email or password. Please try again!";
+                    header('location: login.php');
+                    die();
+                }
+            }
         }
-    }
-}
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Login</title>
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -96,30 +101,36 @@ if (isset($_POST['email'])) {
         echo "<div id='success-message'>$successMessage</div>";
     }
     ?>
+
     <?php
     if (isset($_SESSION["login_fail_message"])) {
         $errorMessages = $_SESSION["login_fail_message"];
         unset($_SESSION["login_fail_message"]);
     }
     ?>
+
     <?php
     if (isset($_SESSION['password_reset_success'])) {
         echo "<div id='success-message'>Password updated successfully! You can now log in.</div>";
-
-        // Clear the session variable after displaying the message
         unset($_SESSION['password_reset_success']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION["error"])) {
+        $errorMessages = $_SESSION["error"];
+        unset($_SESSION["error"]);
     }
     ?>
     <div class="header">
         <h2>Login</h2>
     </div>
     <form method="post" action="login.php">
-            <?php
-            if (isset($errorMessages))
-            {
-                echo "<div style='color: red'>$errorMessages</div>";
-            }
-            ?>
+        <?php
+        if (isset($errorMessages))
+        {
+            echo "<div style='color: red'>$errorMessages</div>";
+        }
+        ?>
         <div class="input-group">
             <label>Email</label>
             <input type="email" name="email" >
@@ -131,7 +142,6 @@ if (isset($_POST['email'])) {
         <div class="input-group">
             <button type="submit" class="btn mt-3 mb-3" name="login_user">Login</button>
         </div>
-
         <p>
             Not yet a member? <a href="register.php">Sign up</a>
         </p>
