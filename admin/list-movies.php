@@ -113,29 +113,7 @@
                     </ul>
             </div>
             <div class="row">
-                <div id="main-panel-left-sidebar">
-                    <div id ="add-btn-container">
-                        <div class = "sidebar-row">
-                            <a href="add-movie.php" class = "btn btn-add">
-                                <i class="fas fa-plus"></i>
-                                Add New Movie</a>
-                        </div>
-                    </div>
-                    <ul>
-                        <span>FEATURED MOVIES</span>
-                        <li>Romeo And Juliet</li>
-                        <li>Titanic</li>
-                        <li>MR Nice Guy</li>
-                        <li>Mission Impossible</li>
-                        <li>Hitman</li>
-                        <hr>
-                        <span>FEATURED GENRES</span>
-                        <li>Action</li>
-                        <li>Commedy</li>
-                        <li>Romance</li>
-                        <li>Chick Flick</li>
-                    </ul>
-            </div>
+
             <div id="users-container">
                 <div id="pagination-container">
                     <ul style="display:flex; position:relative;margin-top:6px">

@@ -7,10 +7,26 @@ $dbConnection = getDbConnection();
         header('location: login.php'); // Redirect to login page if not logged in
         exit();
     }
-if (isset($_POST['logout'])) {
-// Unset profile image information
-    unset($_SESSION['user']['profile_image']);
-}
+    if (isset($_POST['logout'])) {
+    // Unset profile image information
+        unset($_SESSION['user']['profile_image']);
+    }
+    $user = $_SESSION['user'];
+    $idUser = $_SESSION['user']['id'];
+   // $user = '';
+    if(!isset($_SESSION['user'])){
+        $stmt = $dbConnection->prepare("SELECT full_name, email, profile_image FROM user WHERE id = :idUser");
+        $stmt->execute([':idUser' => $idUser]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        var_dump($user);
+        if (!$user->rowCount()) {
+            $fullName = $user['full_name'];
+            $email = $user['email'];
+            $pictureProfile = $user['picture_profile'];
+        } else {
+            echo "Data found!";
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -39,7 +55,9 @@ if (isset($_POST['logout'])) {
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
-                        <img src="profileImage/<?= $_SESSION['user']['profile_image'] ?>" class="img-account-profile rounded-circle mb-2">
+
+                        <img src="profileImage/<?php echo $user['profile_image'] ?>" class="img-account-profile rounded-circle mb-2">
+
                         <!--<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
                         <!-- Profile picture help block-->
                         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
@@ -70,12 +88,12 @@ if (isset($_POST['logout'])) {
                         <!-- Form Group (username)-->
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Full Name</label>
-                            <input class="form-control" id="inputFullName" type="text" name="fullName" placeholder="Enter your Full Name" value="<?php echo $_SESSION["user"]["full_name"]?>">
+                            <input class="form-control" id="inputFullName" type="text" name="fullName" placeholder="Enter your Full Name" value="<?php echo $user["full_name"]?>">
                         </div>
                         <!-- Form Group (email address)-->
                         <div class="mb-3">
                             <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                            <input class="form-control" id="inputEmailAddress" type="email" name="email" placeholder="Enter your email address" value="<?php echo $_SESSION["user"]["email"]?>">
+                            <input class="form-control" id="inputEmailAddress" type="email" name="email" placeholder="Enter your email address" value="<?php echo $user["email"]?>">
                         </div>
                         <div>
                             <label class="small mb-1">Gender</label>
